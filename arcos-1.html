@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Arcos 1 - Canvas HTML5</title>
+    </head>
+    <body>
+        <canvas id="meu_canvas" width="400" height="400">
+            Oops. Parece que seu navegador não suporta a tecnologia Canvas.
+        </canvas>
+        <script>
+            // ref ao canvas
+            var canvas = document.getElementById('meu_canvas');
+            // obtem o contexto grafico
+            var c = canvas.getContext('2d');
+            
+            // Desenhar um arco
+            
+            /*
+                O método arc recebe os seguintes parâmetros:
+                    • x, y: as coordenadas do ponto central da circunferência;
+                    • raio da circunferência em pixels;
+                    • ângulo inicial em radianos;
+                    • ângulo final em radianos;
+                    • sentido: aqui você pode passar false (sentido anti-horário) ou true
+                    (sentido horário). Este parâmetro é opcional; se omitido, o desenho é
+                    feito no sentido anti-horário.
+            */
+            
+            var graus = 180;
+            var radianos = graus * Math.PI / 180;
+            
+            c.beginPath();
+            c.arc(200, 200, 100, 0, radianos, true);
+            c.stroke();
+            
+            c.beginPath();
+            c.arc(200, 200, 50, 0, 2 * Math.PI);
+            c.fillStyle = 'blue';
+            c.fill();
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Imagens 2 - Canvas HTML5</title>
+    </head>
+    <body>
+        <canvas id="meu_canvas" width="400" height="400">
+            Oops. Parece que seu navegador não suporta a tecnologia Canvas.
+        </canvas>
+        <script>
+            // ref ao canvas
+            var canvas = document.getElementById('meu_canvas');
+            // obtem o contexto grafico
+            var c = canvas.getContext('2d');
+            
+            // Importa img
+            var explosao = new Image();
+            explosao.src = 'assets/images/explosao.png';
+            
+            explosao.onload = function() {
+                c.drawImage(
+                            explosao, // Arquivo de imagem
+                            80, 10, 60, 65, // Area de clipping
+                            20, 20, 60, 65 // Desenha a area recortada no canvas                           
+                );                
+            }
+            
+        </script>
+    </body>
+</html>
