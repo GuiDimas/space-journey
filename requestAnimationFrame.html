@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>requestAnimationFrame - Canvas HTML5</title>
+    </head>
+    <body>
+        <canvas id="palco" width="800" height="600">
+            Oops. Parece que seu navegador não suporta a tecnologia Canvas.
+        </canvas>
+        <script>
+            
+            // Variavel do canvas
+            var canvas = document.getElementById('palco');
+            
+            // Variavel do contexto
+            var c = canvas.getContext('2d');            
+            
+            // Ball info
+            var x = -10;
+            var y = 290;
+            var raio = 10;
+            
+            
+            // Momento inicial
+            var anterior = new Date().getTime();
+            
+            
+            // Dou um requestAnimationFrame na minha função que será repetida
+            requestAnimationFrame(minhaFuncao);
+            
+            function minhaFuncao() {
+                // Instante atual
+                var atual = new Date().getTime();
+                
+                // Tempo decorrido
+                var decorrido = atual - anterior;
+                
+                
+                // Limpamos o palco
+                c.clearRect(0, 0, 800, 600);
+                
+                c.beginPath();
+                c.arc(x, y, raio, 0, Math.PI * 2);
+                c.fill();
+                
+                
+                // Define velocidade da bola
+                var vel = 100;
+                
+                // Faz ela andar
+                x += vel * decorrido / 1000;
+                
+                // Guarda o momento atual como anterior do próximo
+                anterior = atual;
+                
+                // "Next frame"
+                requestAnimationFrame(minhaFuncao);
+            }
+            
+        </script>
+    </body>
+</html>
