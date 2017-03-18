@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Loop de Animação - Canvas HTML5</title>
+        <script src="js/animacao.js"></script>
+        <script src="js/bola.js"></script>
+    </head>
+    <body>
+        <canvas id="palco" width="500" height="500">
+            Oops. Parece que seu navegador não suporta a tecnologia Canvas.
+        </canvas>
+        <script>
+            // Obtem contexto
+            var canvas = document.getElementById('palco');
+            var context = canvas.getContext('2d');
+            
+            
+            // Instanciamos as bolas
+            
+            // Bola 1
+            var b1 = new Bola(context);
+            b1.x = 100;
+            b1.y = 200;
+            b1.velocidadeX = 20;
+            b1.velocidadeY = -10;
+            b1.cor = 'red';
+            b1.raio = 20;
+
+            // Bola 2
+            var b2 = new Bola(context);
+            b2.x = 200;
+            b2.y = 100;
+            b2.velocidadeX = -10;
+            b2.velocidadeY = 20;
+            b2.cor = 'blue';
+            b2.raio = 30;
+            
+            
+            // Criamos o loop de animação
+            var animacao = new Animacao(context);
+            animacao.novoSprite(b1);
+            animacao.novoSprite(b2);
+            
+            // Liga a animacao
+            animacao.ligar();
+            
+        </script>
+    </body>
+</html>
