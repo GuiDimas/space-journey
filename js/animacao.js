@@ -30,7 +30,7 @@ Animacao.prototype = {
             this.sprites[i].atualizar();
         
         // Desenhamos os sprites
-        for (var i in thiss.sprites)
+        for (var i in this.sprites)
             this.sprites[i].desenhar();
         
         // Chamamos o proximo ciclo
