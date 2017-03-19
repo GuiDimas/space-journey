@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Trabalhando com Spritesheets- Canvas HTML5</title>
+    </head>
+    <body>
+        <canvas id="palco" width="500" height="500">
+            Ops! O seu navegador parece não ter suporte para este recurso.. :(
+        </canvas>
+        <script>
+            // Encontra o canvas e o contexo 2D
+            var canvas = document.getElementById('palco');
+            var context = canvas.getContext('2d');
+            
+            // Cria um novo elemento de imagem para o nosso spritesheet do sonic
+            var sonic = new Image();
+            
+            // Carrega a imagem do spritesheet do sonic no elemento sonic
+            sonic.src = 'assets/images/spritesheet.png';
+            
+            // Depois de carregada, realiza o clipping
+            sonic.onload = function() {
+                // Quantidade de frames na horizontal
+                var colunas = 8;
+                
+                // Quantidade de frames na vertical
+                var linhas = 3;
+                
+                // Dimensao de cada frame
+                var largura = sonic.width / colunas;
+                var altura = sonic.height / linhas;
+                
+                // Posição do frame que eu desejo (linha e coluna)
+                var queroLinha = 2;
+                var queroColuna = 7;
+                
+                // Posição de recorte
+                var x = largura * queroColuna;
+                var y = altura * queroLinha;
+            
+                // Desenhamos a imagem no canvas
+                context.drawImage(sonic, x, y, largura, altura, 100, 100, largura, altura);
+            }
+        </script>
+    </body>
+</html>
