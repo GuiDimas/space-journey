@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Trabalhando com Spritesheets- Canvas HTML5</title>
+        <script src="js/spritesheet.js"></script>
     </head>
     <body>
         <canvas id="palco" width="500" height="500">
@@ -19,29 +20,35 @@
             // Carrega a imagem do spritesheet do sonic no elemento sonic
             sonic.src = 'assets/images/spritesheet.png';
             
-            // Depois de carregada, realiza o clipping
-            sonic.onload = function() {
-                // Quantidade de frames na horizontal
-                var colunas = 8;
-                
-                // Quantidade de frames na vertical
-                var linhas = 3;
-                
-                // Dimensao de cada frame
-                var largura = sonic.width / colunas;
-                var altura = sonic.height / linhas;
-                
-                // Posição do frame que eu desejo (linha e coluna)
-                var queroLinha = 2;
-                var queroColuna = 7;
-                
-                // Posição de recorte
-                var x = largura * queroColuna;
-                var y = altura * queroLinha;
+            // Cria um objeto do tipo Spritesheet, passando context, imagem, linhas e colunas
+            var sheet = new Spritesheet(context, sonic, 3, 8);
             
-                // Desenhamos a imagem no canvas
-                context.drawImage(sonic, x, y, largura, altura, 100, 100, largura, altura);
+            // Seta a duração de cada quadro da animação
+            sheet.intervalo = 60;
+            
+            // Define qual linha sera animada (correndo para a direita)
+            sheet.linha = 1;
+            
+            // Após carregar a imagem, chama a função gameLoop
+            sonic.onload = gameLoop;
+            
+            // Função responsável por limpar o canvas,
+            // avançar um quadro na animação e desenhar
+            // no canvas o frame
+            function gameLoop(){
+                // Limpa o canvas
+                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+                
+                // Avanca na animação
+                sheet.proximoQuadro();
+                
+                // Desenha o quadro atual na posição enviada
+                sheet.desenhar(100, 100);
+                
+                // faz um request para o próximo frame
+                requestAnimationFrame(gameLoop);
             }
+            
         </script>
     </body>
 </html>
