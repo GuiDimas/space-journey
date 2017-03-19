@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Movimentando personagens com o teclado - Canvas HTML5</title>
+        <script src="js/teclado.js"></script>
+    </head>
+    <body>
+        <canvas id="palco" width="500" height="500">
+            Oops. Parece que seu navegador não suporta a tecnologia Canvas.
+        </canvas>
+        <div id="teclas"></div>
+        <script>
+            // Obtem contexto
+            var canvas = document.getElementById('palco');
+            var context = canvas.getContext('2d');
+            
+            var posicao = 0;
+            desenharPersonagem();
+            
+            var teclado = new Teclado(document);
+            
+            requestAnimationFrame(animar);
+            
+            
+            function animar(){
+                
+                if (teclado.pressionada(SETA_ESQUERDA)) {
+                    posicao -= 10;
+                } else if (teclado.pressionada(SETA_DIREITA)) {
+                    posicao += 10;
+                }
+                
+                desenharPersonagem();
+                
+                requestAnimationFrame(animar);
+            }
+            
+            function desenharPersonagem(){
+                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+                context.fillRect(posicao, 100, 20, 50);
+            }
+            
+        </script>
+    </body>
+</html>
