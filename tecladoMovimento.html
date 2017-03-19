@@ -4,6 +4,9 @@
         <meta charset="utf-8" />
         <title>Movimentando personagens com o teclado - Canvas HTML5</title>
         <script src="js/teclado.js"></script>
+        <script src="js/animacao.js"></script>
+        <script src="js/bola.js"></script>
+        <script src="js/heroi.js"></script>
     </head>
     <body>
         <canvas id="palco" width="500" height="500">
@@ -15,32 +18,21 @@
             var canvas = document.getElementById('palco');
             var context = canvas.getContext('2d');
             
-            var posicao = 0;
-            desenharPersonagem();
-            
+            // Teclado e animacao
             var teclado = new Teclado(document);
+            var animacao = new Animacao(context);
             
-            requestAnimationFrame(animar);
             
+            var heroi = new Heroi(context, teclado, animacao);
+            heroi.x = 0;
+            heroi.y = 100;
+            animacao.novoSprite(heroi);
             
-            function animar(){
-                
-                if (teclado.pressionada(SETA_ESQUERDA)) {
-                    posicao -= 10;
-                } else if (teclado.pressionada(SETA_DIREITA)) {
-                    posicao += 10;
-                }
-                
-                desenharPersonagem();
-                
-                requestAnimationFrame(animar);
-            }
+            teclado.disparou(ESPACO, function() {
+                heroi.atirar();
+            });
             
-            function desenharPersonagem(){
-                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-                context.fillRect(posicao, 100, 20, 50);
-            }
-            
+            animacao.ligar();            
         </script>
     </body>
 </html>
