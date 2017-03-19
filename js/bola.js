@@ -24,6 +24,7 @@ function Bola(context) {
 }
 
 Bola.prototype = {
+    // Interface  de animação
     atualizar: function() {
         // Contexto
         var c = this.context;
@@ -64,5 +65,28 @@ Bola.prototype = {
         
         // Restaura as configurações do contexto para as "originais"
         c.restore();
+    },
+    
+    // Interface de colisão
+    retangulosColisao: function() {
+        // Retornamos um objeto anonimo dentro de um array
+        return [
+            {
+                x: this.x - this.raio, // this.x é o centro da bola
+                y: this.y - this.raio, // mesma coisa com o this.y
+                largura: this.raio * 2,
+                altura: this.raio * 2
+            }
+        ];
+    },
+    
+    colidiuCom: function(sprite) {
+        // Verifica se a bola está à esqueda da outra
+        if (this.x < sprite.x) this.velocidadeX = -Math.abs(this.velocidadeX);
+        else this.velocidadeX = Math.abs(this.velocidadeX);
+        
+        // Verifica se a bola está acima da outra
+        if (this.y < sprite.y) this.velocidadeY = -Math.abs(this.velocidadeY);
+        else this.velocidadeY = Math.abs(this.velocidadeY);
     }
 }

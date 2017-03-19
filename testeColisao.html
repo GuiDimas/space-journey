@@ -7,7 +7,7 @@
         <script src="js/bola.js"></script>
     </head>
     <body>
-        <canvas id="palco" width="500" height="500">
+        <canvas id="palco" width="1200" height="600">
             Ops! O seu navegador parece não ter suporte para este recurso.. :(
         </canvas>
         <script>
@@ -29,7 +29,7 @@
             var b2 = new Bola(context);
             b2.x = 300;
             b2.y = 300;
-            b2.velocidadeX = -5;
+            b2.velocidadeX = 10;
             b2.velocidadeY = 10;
             b2.cor = 'red';
             b2.raio = 30;
@@ -40,6 +40,10 @@
             colisor.novoSprite(b1);
             colisor.novoSprite(b2);
             
+            // Atribuimos uma função para tratamento geral de colisões
+            colisor.aoColidir = function() {
+                //alert('PÁ!');
+            }
             
             // Faz o request para a função animar
             requestAnimationFrame(animar);
