@@ -1,48 +1,63 @@
-function Animacao(context){
+function Animacao(context) {
+    // Passamos um contexto para podermos limpar a tela
     this.context = context;
+    
+    // Cria um array de sprites para armazenar os elementos da tela
     this.sprites = [];
+    
+    // Variavel para definir se a animação estará ligada ou desligada
     this.ligado = false;
 }
 
 Animacao.prototype = {
     novoSprite: function(sprite) {
+        // Adiciona um novo elemento no array de sprites
         this.sprites.push(sprite);
     },
     
     ligar: function() {
+        // Define a animação como ligada
         this.ligado = true;
+        
+        // Chama o próximo frame para atualizar a tela
         this.proximoFrame();
     },
     
     desligar: function() {
+        // Define a animação como desligada
         this.ligado = false;
     },
     
     proximoFrame: function() {
-        // Verifica se pode continuar
+        // Verifica se está ligada a animação para atulizar
         if (!this.ligado) return;
         
-        // Limpa a tela a cada ciclo
+        // Limpa a tela para o próximo frame (a cada ciclo)
         this.limparTela();
         
-        // Atualizamos os estados os sprites
+        // Para cada sprite, chamamos o metodo que atulizada o estado dos mesmos
+        // Como se fosse o "próximo frame" para aquele sprite
         for (var i in this.sprites)
             this.sprites[i].atualizar();
         
-        // Desenhamos os sprites
+        // Desenha cada sprite na sua nova posição/frame.
         for (var i in this.sprites)
             this.sprites[i].desenhar();
         
-        // Chamamos o proximo ciclo
+        // Chamamos o próximo ciclo com o requestAnimationFrame
+        // Foi definido assim, pois não podemos invocar a função proximoFrame()
+        // Diretamente dentro do requestAminationFrame
         var animacao = this;
         requestAnimationFrame(function() {
-           animacao.proximoFrame(); 
+            animacao.proximoFrame();
         });
     },
     
     limparTela: function() {
-        var ctx = this.context;
-        // Limpa o canvas do contexto
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        // Facilita a escrita
+        var c = this.context;
+        
+        // Apaga todo o quadrado ocupado pelo canvas
+        c.clearRect(0, 0, c.canvas.width, c.canvas.height);
     }
 }

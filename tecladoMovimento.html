@@ -3,35 +3,47 @@
     <head>
         <meta charset="utf-8" />
         <title>Movimentando personagens com o teclado - Canvas HTML5</title>
-        <script src="js/teclado.js"></script>
         <script src="js/animacao.js"></script>
+        <script src="js/teclado.js"></script>
         <script src="js/bola.js"></script>
         <script src="js/heroi.js"></script>
     </head>
     <body>
         <canvas id="palco" width="500" height="500">
-            Oops. Parece que seu navegador não suporta a tecnologia Canvas.
+            Ops! O seu navegador parece não ter suporte para este recurso.. :(
         </canvas>
-        <div id="teclas"></div>
         <script>
-            // Obtem contexto
+            // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
             var context = canvas.getContext('2d');
             
-            // Teclado e animacao
-            var teclado = new Teclado(document);
+            // Cria o objeto de animacao
             var animacao = new Animacao(context);
             
+            // Cria o objeto de teclado
+            var teclado = new Teclado(document);
             
-            var heroi = new Heroi(context, teclado, animacao);
-            heroi.x = 0;
-            heroi.y = 100;
-            animacao.novoSprite(heroi);
+            // Cria o heroi que aparecerá na tela
+            var hero = new Heroi(context, teclado, animacao);
             
+            // Define a posição X do herói na tela
+            hero.x = 100;
+            
+            // Define a posição Y do herói na tela
+            hero.y = 100;
+            
+            // Registramos o herói na classe Animação
+            // para ser atualizado e desenhado na tela
+            animacao.novoSprite(hero);
+            
+            // Criamos um evento de teclado para disparar o tiro do herói
             teclado.disparou(ESPACO, function() {
-                heroi.atirar();
+                // Caso o jogador tenha disparado a tecla ESPAÇO
+                // O nosso herói executa a função atirar()
+                hero.atirar();
             });
             
+            // Liga a animação
             animacao.ligar();            
         </script>
     </body>
