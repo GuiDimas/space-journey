@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Colisão entre objetos - Canvas HTML5</title>
+        <script src="js/colisor.js"></script>
+        <script src="js/bola.js"></script>
+    </head>
+    <body>
+        <canvas id="palco" width="500" height="500">
+            Ops! O seu navegador parece não ter suporte para este recurso.. :(
+        </canvas>
+        <script>
+            // Encontra o canvas e o contexo 2D
+            var canvas = document.getElementById('palco');
+            var context = canvas.getContext('2d');
+            
+            
+            // Bolinha 1
+            var b1 = new Bola(context);
+            b1.x = 200;
+            b1.y = 200;
+            b1.velocidadeX = 10;
+            b1.velocidadeY = -5;
+            b1.cor = 'blue';
+            b1.raio = 20;
+            
+            // Bolinha 2
+            var b2 = new Bola(context);
+            b2.x = 300;
+            b2.y = 300;
+            b2.velocidadeX = -5;
+            b2.velocidadeY = 10;
+            b2.cor = 'red';
+            b2.raio = 30;
+            
+            
+            // Criamos o objeto colisor
+            var colisor = new Colisor();
+            colisor.novoSprite(b1);
+            colisor.novoSprite(b2);
+            
+            
+            // Faz o request para a função animar
+            requestAnimationFrame(animar);
+            
+            // Função de animação
+            function animar() {
+                // Limpa o canvas
+                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+                
+                // Atualiza as bolinhas
+                b1.atualizar();
+                b2.atualizar();
+                
+                // Desenha as bolinhas
+                b1.desenhar();
+                b2.desenhar();
+                
+                // Colisor faz o processamento
+                colisor.processar();
+                
+                // Faz o request para o próximo frame
+                requestAnimationFrame(animar);
+            }
+            
+        </script>
+    </body>
+</html>

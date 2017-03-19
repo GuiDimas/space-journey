@@ -25,6 +25,17 @@ function Bola(context) {
 
 Bola.prototype = {
     atualizar: function() {
+        // Contexto
+        var c = this.context;
+        
+        // Estourou o limite da borda horizontal
+        if (this.x < this.raio || this.x > c.canvas.width - this.raio)
+            this.velocidadeX *= -1;
+        
+        // Estourou o limite da borda vertical
+        if (this.y < this.raio || this.y > c.canvas.height - this.raio)
+            this.velocidadeY *= -1;
+
         // "Anda com a posição da bola em X"
         this.x += this.velocidadeX;
         // "Anda com a posição da bola em Y"
