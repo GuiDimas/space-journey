@@ -2,11 +2,14 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Trabalhando com Spritesheets- Canvas HTML5</title>
+        <title>Controlando o Sonic com o teclado - Canvas HTML5</title>
         <script src="js/spritesheet.js"></script>
+        <script src="js/animacao.js"></script>
+        <script src="js/teclado.js"></script>
+        <script src="js/sonic.js"></script>
     </head>
     <body>
-        <canvas id="palco" width="500" height="500">
+        <canvas id="palco" width="1500" height="500">
             Ops! O seu navegador parece não ter suporte para este recurso.. :(
         </canvas>
         <script>
@@ -14,41 +17,28 @@
             var canvas = document.getElementById('palco');
             var context = canvas.getContext('2d');
             
-            // Cria um novo elemento de imagem para o nosso spritesheet do sonic
-            var sonic = new Image();
+            // Cria o objeto para capturar o teclado
+            var teclado = new Teclado(document);
             
-            // Carrega a imagem do spritesheet do sonic no elemento sonic
-            sonic.src = 'assets/images/spritesheet.png';
+            // Cria o objeto de animação
+            var animacao = new Animacao(context);
             
-            // Cria um objeto do tipo Spritesheet, passando context, imagem, linhas e colunas
-            var sheet = new Spritesheet(context, sonic, 3, 8);
+            // Carrega a imagem do sonic
+            var imgSonic = new Image();
+            imgSonic.src = 'assets/images/spritesheet.png';
             
-            // Seta a duração de cada quadro da animação
-            sheet.intervalo = 60;
+            // Cria o objeto Sonic
+            var sonic = new Sonic(context, teclado, imgSonic);
+            sonic.x = 0;
+            sonic.y = 200;
             
-            // Define qual linha sera animada (correndo para a direita)
-            sheet.linha = 1;
+            // Registra o sonic como um novo elemento da tela
+            animacao.novoSprite(sonic);
             
-            // Após carregar a imagem, chama a função gameLoop
-            sonic.onload = gameLoop;
-            
-            // Função responsável por limpar o canvas,
-            // avançar um quadro na animação e desenhar
-            // no canvas o frame
-            function gameLoop(){
-                // Limpa o canvas
-                context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-                
-                // Avanca na animação
-                sheet.proximoQuadro();
-                
-                // Desenha o quadro atual na posição enviada
-                sheet.desenhar(100, 100);
-                
-                // faz um request para o próximo frame
-                requestAnimationFrame(gameLoop);
+            // Inicia a animação depois que a imagem estiver carregada
+            imgSonic.onload = function() {
+                animacao.ligar();
             }
-            
         </script>
     </body>
 </html>
