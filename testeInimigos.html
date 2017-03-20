@@ -9,6 +9,7 @@
         <script src="js/tiro.js"></script>
         <script src="js/colisor.js"></script>
         <script src="js/ovni.js"></script>
+        <script src="js/fundo.js"></script>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -25,6 +26,21 @@
             var animacao = new Animacao(context);
             var colisor = new Colisor();
             
+            // Carrega a imagem do espaço
+            var imgEspaco = new Image();
+            imgEspaco.src = 'assets/images/fundo-espaco.png';
+            imgEspaco.onload = carregando;
+            
+            // Carega a imagem das estrelas
+            var imgEstrelas = new Image();
+            imgEstrelas.src = 'assets/images/fundo-estrelas.png';
+            imgEstrelas.onload = carregando;
+            
+            // Carrega a imagem das nuvens
+            var imgNuvens = new Image();
+            imgNuvens.src = 'assets/images/fundo-nuvens.png';
+            imgNuvens.onload = carregando;
+            
             // Imagem da nave
             var imgNave = new Image();
             imgNave.src = 'assets/images/nave.png';
@@ -34,6 +50,21 @@
             var imgOvni = new Image();
             imgOvni.src = 'assets/images/ovni.png';
             imgOvni.onload = carregando;
+            
+            
+            // Criamos, configuramos e registramos os fundos na classe animacao
+            var fundo1 = new Fundo(context, imgEspaco);
+            fundo1.velocidade = 3;
+            animacao.novoSprite(fundo1);
+            
+            var fundo2 = new Fundo(context, imgEstrelas);
+            fundo2.velocidade = 7;
+            animacao.novoSprite(fundo2);
+            
+            var fundo3 = new Fundo(context, imgNuvens);
+            fundo3.velocidade = 10;
+            animacao.novoSprite(fundo3);
+            
             
             // Criamos a nave
             var nave = new Nave(context, teclado, imgNave);
@@ -71,10 +102,11 @@
             
             // Carregamento e inicializacao
             var carregadas = 0;
+            var total = 5;
             
             function carregando() {
                 carregadas++;
-                if (carregadas == 2) iniciar();
+                if (carregadas == total) iniciar();
             }
             
             function iniciar() {

@@ -37,7 +37,9 @@ Animacao.prototype = {
         if (!this.ligado) return;
         
         // Limpa a tela para o próximo frame (a cada ciclo)
-        this.limparTela();
+        // Depreciado: Como as imagens de fundo são redesenhadas a todo momento
+        //             não é mais necessário limpar a tela a cada novo ciclo.
+        //this.limparTela();
         
         // Para cada sprite, chamamos o metodo que atulizada o estado dos mesmos
         // Como se fosse o "próximo frame" para aquele sprite
