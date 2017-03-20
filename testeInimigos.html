@@ -55,8 +55,8 @@
                 // Criamos um novo ovni passando o contexto e a imagem
                 var ovni = new Ovni(context, imgOvni);
                 
-                // Setamos uma velocidade randomica entre 5 e 20
-                ovni.velocidade = Math.floor(Math.random() * (20 - 5 + 1));
+                // Setamos uma velocidade randomica entre 5 e 15
+                ovni.velocidade = Math.floor(Math.random() * (15 - 5 + 1));
                 
                 // Setamos a posicao X do ovni (de 0 até canvas.width - imgOvni.width)
                 ovni.x = Math.floor(Math.random() * (canvas.width - imgOvni.width + 1));
