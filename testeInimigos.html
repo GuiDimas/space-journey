@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Teste nave - Canvas HTML5</title>
+        <script src="js/animacao.js"></script>
+        <script src="js/teclado.js"></script>
+        <script src="js/nave.js"></script>
+        <script src="js/tiro.js"></script>
+        <script src="js/colisor.js"></script>
+        <script src="js/ovni.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <canvas id="palco" width="500" height="500">
+            Ops! O seu navegador parece não ter suporte para este recurso.. :(
+        </canvas>
+        <script>
+            // Encontra o canvas e o contexo 2D
+            var canvas = document.getElementById('palco');
+            var context = canvas.getContext('2d');
+            
+            // Teclado, animação, colisor (nosso game engine)
+            var teclado = new Teclado(document);
+            var animacao = new Animacao(context);
+            var colisor = new Colisor();
+            
+            // Imagem da nave
+            var imgNave = new Image();
+            imgNave.src = 'assets/images/nave.png';
+            imgNave.onload = carregando;
+            
+            // Imagem do ovni
+            var imgOvni = new Image();
+            imgOvni.src = 'assets/images/ovni.png';
+            imgOvni.onload = carregando;
+            
+            // Criamos a nave
+            var nave = new Nave(context, teclado, imgNave);
+            
+            // Registramos a nave na classe de animacao
+            animacao.novoSprite(nave);
+            
+            // Registramos a nave como um colisor
+            colisor.novoSprite(nave);
+            
+            // Definimos a tecla de ataque da nave
+            teclado.disparou(ESPACO, function() {
+                nave.atirar();                
+            });
+            
+            
+            // Função para criar novos inimigos
+            function novoOvni() {
+                // Criamos um novo ovni passando o contexto e a imagem
+                var ovni = new Ovni(context, imgOvni);
+                
+                // Setamos uma velocidade randomica entre 5 e 20
+                ovni.velocidade = Math.floor(Math.random() * (20 - 5 + 1));
+                
+                // Setamos a posicao X do ovni (de 0 até canvas.width - imgOvni.width)
+                ovni.x = Math.floor(Math.random() * (canvas.width - imgOvni.width + 1));
+                
+                // Desconta a altura do ovni, para nascer escondido
+                ovni.y -= imgOvni.height;
+                
+                // Registramos na animação e no colisor
+                animacao.novoSprite(ovni);
+                colisor.novoSprite(ovni);
+            }
+            
+            // Carregamento e inicializacao
+            var carregadas = 0;
+            
+            function carregando() {
+                carregadas++;
+                if (carregadas == 2) iniciar();
+            }
+            
+            function iniciar() {
+                // Posicionamos a nave e setamos a velocidade
+                nave.x = (canvas.width + imgNave.width) / 2;
+                nave.y = canvas.height - imgNave.height - 10;
+                nave.velocidade = 5;
+                
+                // Iniciamos a animação
+                animacao.ligar();
+                
+                // Definimos um intervalo para criar novos inimigos
+                setInterval(novoOvni, 1000);
+            }
+        </script>
+    </body>
+</html>
