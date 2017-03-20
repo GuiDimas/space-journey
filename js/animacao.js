@@ -13,6 +13,10 @@ Animacao.prototype = {
     novoSprite: function(sprite) {
         // Adiciona um novo elemento no array de sprites
         this.sprites.push(sprite);
+        
+        // Refenciamos essa classe no atributo animação
+        // do sprite passado por parâmetro
+        sprite.animacao = this;
     },
     
     ligar: function() {

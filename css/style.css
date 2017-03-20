@@ -1,0 +1,15 @@
+* {
+    border: 0;
+    padding: 0;
+}
+
+body {
+    background: #DDDDDD;
+}
+
+#palco {
+    background: black;
+    display: block;
+    margin: 100px auto;
+    box-shadow: 1px 1px 10px 0 black;
+}
