@@ -10,6 +10,13 @@ function Animacao(context) {
     
     // Array de tarefas a serem processadas
     this.processamentos = [];
+    
+    // Array de elementos que podem ser excluidos
+    this.spritesExcluir = [];
+    
+    // Array de processamentos para a exclusão
+    this.processamentosExcluir = [];
+    
 }
 
 Animacao.prototype = {
@@ -57,6 +64,9 @@ Animacao.prototype = {
         for (var i in this.processamentos)
             this.processamentos[i].processar();
         
+        // Chama a função para processar as exclusões
+        this.processarExclusoes();
+        
         // Chamamos o próximo ciclo com o requestAnimationFrame
         // Foi definido assim, pois não podemos invocar a função proximoFrame()
         // Diretamente dentro do requestAminationFrame
@@ -79,5 +89,40 @@ Animacao.prototype = {
         // Definimos o atributo animação do parametro
         // processamento como sendo a classe de animação
         processamento.animacao = this;
+    },
+    
+    exlcuirSprite: function(sprite) {
+        // Adicionamos o sprite que queremos exluir
+        // na lista de exclusao
+        this.spritesExcluir.push(sprite);
+    },
+    
+    excluirProcessamento: function(processamento) {
+        // Adicionamos o processamento que queremos exluir
+        // na lista de exclusao
+        this.processamentosExcluir.push(processamento);
+    },
+    
+    processarExclusoes: function() {
+        // Criamos novos arrays
+        var novoSprites = [];
+        var novoProcessamentos = [];
+        
+        // Adicionamos apenas se não estiver na lista para exclusão
+        for (var i in this.sprites) {
+            if (this.spritesExcluir.indexOf(this.sprites[i]) == -1) novoSprites.push(this.sprites[i]);
+        }
+        
+        for (var i in this.processamentos) {
+            if (this.processamentosExcluir.indexOf(this.processamentos[i]) == -1) novoProcessamentos.push(this.processamentos[i]);
+        }
+        
+        // Faz a limpeza dos arrays de exclusões
+        this.spritesExcluir = [];
+        this.processamentosExcluir = [];
+        
+        // Substitui os arrays antigos pelos novos
+        this.sprites = novoSprites;
+        this.processamentos = novoProcessamentos;
     }
 }

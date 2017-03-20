@@ -4,6 +4,9 @@ function Colisor(){
     
     // Inicializacao da funcao aoColidir
     this.aoColidir = null;
+    
+    // Lista de elementos que podem ser excluídos
+    this.spritesExcluir = [];
 }
 
 Colisor.prototype = {
@@ -46,6 +49,9 @@ Colisor.prototype = {
                 }                
             }
         }
+        
+        // Chama o método que processa as exlusões
+        this.processarExclusoes();
     },
     
     testarColisao: function(sprite1, sprite2) {
@@ -100,5 +106,28 @@ Colisor.prototype = {
         
         // Retornamos a string unica
         return str;
+    },
+    
+    exlcuirSprite: function(sprite) {
+        // Adicionamos o sprite que queremos exluir
+        // na lista de exclusao
+        this.spritesExcluir.push(sprite);
+    },
+    
+    processarExclusoes: function() {
+        // Cria um novo array
+        var novoArray = [];
+        
+        // Adicionamos no novo array apenas os
+        // elementos que não serão excluídos
+        for (var i in this.sprites) {
+            if (this.spritesExcluir.indexOf(this.sprites[i]) == -1) novoArray.push(this.sprites[i]);
+        }
+        
+        // Limpa o array de exclusões
+        this.spritesExcluir = [];
+        
+        // Substitui o array velho pelo novo
+        this.sprites = novoArray;
     }
 }
