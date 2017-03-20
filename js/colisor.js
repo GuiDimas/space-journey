@@ -10,6 +10,10 @@ Colisor.prototype = {
     novoSprite: function(sprite) {
         // Adicionamos o novo sprite à lista de sprites
         this.sprites.push(sprite);
+        
+        // Adicionamos a classe colisor no sprite passado
+        // por parâmetro
+        sprite.colisor = this;
     },
     
     processar: function(){

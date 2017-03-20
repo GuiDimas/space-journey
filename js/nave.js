@@ -57,5 +57,22 @@ Nave.prototype = {
         
         // Adicionamos o tiro criado como um novo sprite
         this.animacao.novoSprite(t);
+        
+        // Registramos o tiro na classe colisor
+        this.colisor.novoSprite(t);
+    },
+    
+    retangulosColisao: function() {
+        return [
+            { x: this.x + 2, y: this.y + 19, largura: 9, altura: 13 },
+            { x: this.x + 17, y: this.y + 4, largura: 2, altura: 2 },
+            { x: this.x + 14, y: this.y + 8, largura: 8, altura: 6 },
+            { x: this.x + 13, y: this.y + 15, largura: 10, altura: 23 },
+            { x: this.x + 25, y: this.y + 19, largura: 9, altura: 13 }
+        ];
+    },
+    
+    colidiuCom: function(outro) {
+        
     }
 }

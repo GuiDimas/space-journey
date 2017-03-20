@@ -7,6 +7,9 @@ function Animacao(context) {
     
     // Variavel para definir se a animação estará ligada ou desligada
     this.ligado = false;
+    
+    // Array de tarefas a serem processadas
+    this.processamentos = [];
 }
 
 Animacao.prototype = {
@@ -50,6 +53,10 @@ Animacao.prototype = {
         for (var i in this.sprites)
             this.sprites[i].desenhar();
         
+        // Executa os processamentos gerais
+        for (var i in this.processamentos)
+            this.processamentos[i].processar();
+        
         // Chamamos o próximo ciclo com o requestAnimationFrame
         // Foi definido assim, pois não podemos invocar a função proximoFrame()
         // Diretamente dentro do requestAminationFrame
@@ -65,5 +72,12 @@ Animacao.prototype = {
         
         // Apaga todo o quadrado ocupado pelo canvas
         c.clearRect(0, 0, c.canvas.width, c.canvas.height);
+    },
+    
+    novoProcessamento: function(processamento) {
+        this.processamentos.push(processamento);
+        // Definimos o atributo animação do parametro
+        // processamento como sendo a classe de animação
+        processamento.animacao = this;
     }
 }

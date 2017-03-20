@@ -41,5 +41,20 @@ Tiro.prototype = {
         
         // Restauramos as configurações para não perder o contexto anterior
         c.restore();
+    },
+    
+    retangulosColisao: function() {
+        return [
+            {
+                x: this.x,
+                y: this.y,
+                largura: this.largura,
+                altura: this.altura
+            }
+        ];
+    },
+    
+    colidiuCom: function(outro) {
+        
     }
 }

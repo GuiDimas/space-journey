@@ -26,6 +26,10 @@
             var animacao = new Animacao(context);
             var colisor = new Colisor();
             
+            // Registramos o colisor como um processamento
+            // da classe animação
+            animacao.novoProcessamento(colisor);
+            
             // Carrega a imagem do espaço
             var imgEspaco = new Image();
             imgEspaco.src = 'assets/images/fundo-espaco.png';
