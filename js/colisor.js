@@ -108,7 +108,7 @@ Colisor.prototype = {
         return str;
     },
     
-    exlcuirSprite: function(sprite) {
+    excluirSprite: function(sprite) {
         // Adicionamos o sprite que queremos exluir
         // na lista de exclusao
         this.spritesExcluir.push(sprite);

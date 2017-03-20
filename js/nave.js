@@ -73,6 +73,12 @@ Nave.prototype = {
     },
     
     colidiuCom: function(outro) {
-        
+        // Verifica se a colisao ocorreu com um ovini
+        if (outro instanceof Ovni) {
+            // Desativa a animação
+            this.animacao.desligar();
+            // Alerta de game over
+            alert('GAME OVER!');
+        }
     }
 }

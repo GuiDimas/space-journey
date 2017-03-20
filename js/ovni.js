@@ -15,7 +15,17 @@ function Ovni(context, imagem) {
 
 Ovni.prototype = {
     atualizar: function() {
+        // Incrementa a posição Y, fazendo- se mover para baixo
         this.y += this.velocidade;
+        
+        // Verifica se o sprite já pode ser excluído
+        if (this.y > this.context.canvas.height) {
+            // Executa a função de exclusao da animação
+            this.animacao.excluirSprite(this);
+            
+            // Executa a função de exclusao do colisor
+            this.colisor.excluirSprite(this);
+        }
     },
     
     desenhar: function() {
@@ -46,6 +56,19 @@ Ovni.prototype = {
     },
     
     colidiuCom: function(outro) {
-        
+        // Verifica se a colisao foi com um tiro
+        if (outro instanceof Tiro) {
+            // Executa a função de exclusao da animação deste ovni
+            this.animacao.excluirSprite(this);
+            
+            // Executa a função de exclusao do colisor deste ovni
+            this.colisor.excluirSprite(this);
+            
+            // Executa a função de exclusao da animação do tiro
+            this.animacao.excluirSprite(outro);
+            
+            // Executa a função de exclusao do colisor do tiro
+            this.colisor.excluirSprite(outro);
+        }
     }
 }

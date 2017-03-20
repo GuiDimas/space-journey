@@ -24,6 +24,15 @@ Tiro.prototype = {
     atualizar: function() {
         // Subtraimos Y para a bala subir
         this.y -= this.velocidade;
+        
+        // Verifica se pode ser excluido
+        if (this.y < -this.altura) {
+            // Executa a função de exclusao da animação
+            this.animacao.excluirSprite(this);
+            
+            // Executa a função de exclusao do colisor
+            this.colisor.excluirSprite(this);
+        }
     },
     
     desenhar: function() {
