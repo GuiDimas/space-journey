@@ -68,7 +68,13 @@ Nave.prototype = {
         
         // Desenhamos a nave no canvas
         this.spritesheet.desenhar(this.x, this.y);
-        this.spritesheet.proximoQuadro();
+        
+        // Verifica se está indo para trás
+        if (this.teclado.pressionada(SETA_BAIXO)) {
+            this.spritesheet.coluna = 1;
+        } else {
+            this.spritesheet.proximoQuadro();
+        }
     },
     
     atirar: function() {

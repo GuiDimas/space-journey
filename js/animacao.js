@@ -35,6 +35,9 @@ Animacao.prototype = {
     },
     
     ligar: function() {
+        // Reiniciamos a contagem do ultimo ciclo para as pausas
+        this.ultimoCiclo = 0;
+        
         // Define a animação como ligada
         this.ligado = true;
         

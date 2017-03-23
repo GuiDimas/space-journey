@@ -108,10 +108,11 @@
                 nave.y = canvas.height - 48 - 10;
                 nave.velocidade = 250;
                 
-                // Configuramos os tiros
-                teclado.disparou(ESPACO, function() {
-                    nave.atirar();
-                });
+                // Ativamos os tiros
+                ativarTiro(true);
+                
+                // Configurações de pausa
+                teclado.disparou(TECLA_P, pausarJogo);
                 
                 // Criamos os inimigos
                 criacaoInimigos();
@@ -166,6 +167,48 @@
                 colisor.novoSprite(ovni);
             }
             
+            // Função responsável por pausar jogo
+            function pausarJogo() {
+                if (animacao.ligado) {
+                    // Desligamos a animação
+                    animacao.desligar();
+                    
+                    // Desativamos os tiros
+                    ativarTiro(false);
+                    
+                    // Mostramos uma mensagem de pausado na tela
+                    context.save();
+                    context.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    context.fillStyle = 'white';
+                    context.strokeStyle = 'black';
+                    context.font = '50px serif';
+                    context.fillText("PAUSADO", 133, 260);
+                    context.strokeText("PAUSADO", 133, 260);
+                    context.restore();
+                } else {
+                    // Reiniciamos o tempo de criação do último Ovni
+                    // para que um novo não nasça assim que despausarmos
+                    criadorInimigos.ultimoOvni = new Date().getTime();
+                    
+                    // Ligamos a animação
+                    animacao.ligar();
+                    
+                    // Ativamos os tiros
+                    ativarTiro(true);
+                }
+            }
+            
+            // Função responsável pela configuração dos tiros
+            function ativarTiro(ativar) {
+                if (ativar) {
+                    teclado.disparou(ESPACO, function() {
+                        nave.atirar();
+                    });
+                } else {
+                    teclado.disparou(ESPACO, null);
+                }
+            }
         </script>
     </body>
 </html>
