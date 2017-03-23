@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Teste nave - Canvas HTML5</title>
+        <script src="js/animacao.js"></script>
+        <script src="js/teclado.js"></script>
+        <script src="js/colisor.js"></script>
+        <script src="js/fundo.js"></script>
+        <script src="js/nave.js"></script>
+        <script src="js/ovni.js"></script>
+        <script src="js/tiro.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <canvas id="palco" width="500" height="500">
+            Ops! O seu navegador parece não ter suporte para este recurso.. :(
+        </canvas>
+        <script>
+            // Encontra o canvas e o contexo 2D
+            var canvas = document.getElementById('palco');
+            var context = canvas.getContext('2d');
+            
+            
+            // Variáveis principais
+            var imagens, animacao, teclado, colisor, nave, criadorInimigos;
+            var totalImagens = 0, carregadas = 0;
+            
+            // Chamamos a função que carrega as imagens
+            carregarImagens();
+             
+            // Função que realiza o carregamento das imagens
+            function carregarImagens() {
+                // Criamos um objeto, associando o nome ao arquivo de imagem                
+                imagens = {
+                    espaco: 'fundo-espaco.png',
+                    estrelas: 'fundo-estrelas.png',
+                    nuvens: 'fundo-nuvens.png',
+                    nave: 'nave.png',
+                    ovni: 'ovni.png'
+                };
+                
+                // Carrega todas as imagens
+                for (var i in imagens) {
+                    // Cria um objeto imagem
+                    var img = new Image();
+                    // Define a imagem que será carregada
+                    img.src = 'assets/images/' + imagens[i];
+                    // Setamos a função carregando para após o carregamento da imagem
+                    img.onload = carregando;
+                    // Incrementamos a quantidade total de imagens
+                    totalImagens++;
+                    
+                    // Substituimos o caminho da imagem, com o objeto de imagem
+                    imagens[i] = img;
+                }
+            }
+            
+            
+            // Função que monitora o carregamento das imagens e inicia o jogo
+            function carregando(){
+                carregadas++;
+                if (carregadas == totalImagens) iniciarObjetos();
+            }
+            
+            // Função responsável por iniciar os principais objetos do jogo
+            function iniciarObjetos() {
+                // Objetos principais
+                animacao = new Animacao(context);
+                teclado = new Teclado(document);
+                colisor = new Colisor();
+                
+                // Inicia as imagens
+                espaco = new Fundo(context, imagens.espaco);
+                estrelas = new Fundo(context, imagens.estrelas);
+                nuvens = new Fundo(context, imagens.nuvens);
+                nave = new Nave(context, teclado, imagens.nave);
+                
+                // Registramos os objetos entre si
+                animacao.novoSprite(espaco);
+                animacao.novoSprite(estrelas);
+                animacao.novoSprite(nuvens);
+                animacao.novoSprite(nave);
+                
+                // Registramos a nave como colisor
+                colisor.novoSprite(nave);
+                
+                // Registramos o colisor nos processamentos
+                animacao.novoProcessamento(colisor);
+                
+                // Chamamos as configurações iniciais
+                configuracoesIniciais();
+            }
+            
+            
+            // Configurações iniciais do game
+            function configuracoesIniciais() {
+                // Configuramos os fundos
+                espaco.velocidade = 3;
+                estrelas.velocidade = 5;
+                nuvens.velocidade = 10;
+                
+                // Configuramos e posicionamos a nave
+                nave.x = canvas.width / 2 - imagens.nave.width / 2;
+                nave.y = canvas.height - imagens.nave.height - 10;
+                nave.velocidade = 5;
+                
+                // Configuramos os tiros
+                teclado.disparou(ESPACO, function() {
+                    nave.atirar();
+                });
+                
+                // Criamos os inimigos
+                criacaoInimigos();
+                
+                // Iniciamos a animacao
+                animacao.ligar();                
+            }
+            
+            function criacaoInimigos() {
+                criadorInimigos = {
+                    ultimoOvni: new Date().getTime(),
+                    
+                    processar: function() {
+                        var agora = new Date().getTime();
+                        var decorrido = agora - this.ultimoOvni;
+                        
+                        // Caso ja tenha passado um segundo
+                        if (decorrido > 1000) {
+                            // Criamos outro inimigo
+                            novoOvni();
+                            // Setamos o ultimo criado como sendo o atual
+                            this.ultimoOvni = agora;
+                        }
+                    }
+                };
+                
+                // Registramos a criação de inimigos como
+                // uma nova tarefa para a animação
+                animacao.novoProcessamento(criadorInimigos);
+            }
+            
+            function novoOvni() {
+                // Capturamos a imagem do ovni
+                var imgOvni = imagens.ovni;
+                
+                // Criamos um novo Ovni
+                var ovni = new Ovni(context, imgOvni);
+                
+                // Definimos uma velocidade randomica para ele (entre 5 e 15)
+                ovni.velocidade = Math.floor(Math.random() * (15 - 5 + 1));
+                
+                // Definimos a posição X que ele vai nascer
+                ovni.x = Math.floor(Math.random() * (canvas.width - imgOvni.width + 1));
+                
+                // Descontamos a altura do Ovni para ele nascer escondido
+                ovni.y = -imgOvni.height;
+                
+                // Registramos o inimigo na classe de animacao
+                animacao.novoSprite(ovni);
+                
+                // Registramos o ovni como um colisor
+                colisor.novoSprite(ovni);
+            }
+            
+        </script>
+    </body>
+</html>
