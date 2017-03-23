@@ -6,11 +6,12 @@
         <script src="js/animacao.js"></script>
         <script src="js/teclado.js"></script>
         <script src="js/colisor.js"></script>
+        <script src="js/spritesheet.js"></script>
         <script src="js/fundo.js"></script>
         <script src="js/nave.js"></script>
         <script src="js/ovni.js"></script>
         <script src="js/tiro.js"></script>
-        <script src="js/spritesheet.js"></script>
+        <script src="js/explosao.js"></script>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -38,7 +39,8 @@
                     estrelas: 'fundo-estrelas.png',
                     nuvens: 'fundo-nuvens.png',
                     nave: 'nave-spritesheet.png',
-                    ovni: 'ovni.png'
+                    ovni: 'ovni.png',
+                    explosao: 'explosao.png'
                 };
                 
                 // Carrega todas as imagens
@@ -75,7 +77,7 @@
                 espaco = new Fundo(context, imagens.espaco);
                 estrelas = new Fundo(context, imagens.estrelas);
                 nuvens = new Fundo(context, imagens.nuvens);
-                nave = new Nave(context, teclado, imagens.nave);
+                nave = new Nave(context, teclado, imagens.nave, imagens.explosao);
                 
                 // Registramos os objetos entre si
                 animacao.novoSprite(espaco);
@@ -146,7 +148,7 @@
                 var imgOvni = imagens.ovni;
                 
                 // Criamos um novo Ovni
-                var ovni = new Ovni(context, imgOvni);
+                var ovni = new Ovni(context, imgOvni, imagens.explosao);
                 
                 // Definimos uma velocidade randomica para ele (entre 5 e 15)
                 ovni.velocidade = Math.floor(Math.random() * (900 - 450 + 1));

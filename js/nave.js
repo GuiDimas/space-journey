@@ -1,4 +1,4 @@
-function Nave(context, teclado, imagem) {
+function Nave(context, teclado, imagem, imgExplosao) {
     // Passamos o contexto para desenhar no canvas
     this.context = context;
     
@@ -7,6 +7,9 @@ function Nave(context, teclado, imagem) {
     
     // Passamos a imagem para carregar no canvas
     this.imagem = imagem;
+    
+    // Passamos a imagem da explosao que será executada
+    this.imgExplosao = imgExplosao;
     
     // Posicao de inicio em X
     this.x = 0;
@@ -92,10 +95,31 @@ Nave.prototype = {
     colidiuCom: function(outro) {
         // Verifica se a colisao ocorreu com um ovini
         if (outro instanceof Ovni) {
-            // Desativa a animação
-            this.animacao.desligar();
-            // Alerta de game over
-            alert('GAME OVER!');
+            // Excluimos a nave e o ovni da animação
+            this.animacao.excluirSprite(this);
+            this.animacao.excluirSprite(outro);
+            
+            // Excluimos a nave e o ovni do colisor
+            this.colisor.excluirSprite(this);
+            this.colisor.excluirSprite(outro);
+            
+            // Criamos 2 explosoes
+            var explosao1 = new Explosao(this.context, this.imgExplosao, this.x, this.y);
+            var explosao2 = new Explosao(this.context, this.imgExplosao, outro.x, outro.y);
+            
+            // Registramos as explosoes para serem exibidas
+            this.animacao.novoSprite(explosao1);
+            this.animacao.novoSprite(explosao2);
+            
+            // Registramos um callback para quando a segunda explosao terminar,
+            // mostrar a mensagem de game over
+            explosao1.fimDaExplosao = function() {
+                // Para  animação
+                this.animacao.desligar();
+                
+                // Mensagem de game over
+                alert('GAME OVER');
+            }
         }
     }
 }

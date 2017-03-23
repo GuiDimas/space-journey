@@ -1,9 +1,12 @@
-function Ovni(context, imagem) {
+function Ovni(context, imagem, imgExplosao) {
     // Passamos um contexto para desenhar o ovni na tela
     this.context = context;
     
     // Passamos a imagem do ovni que será desenhado na tela
     this.imagem = imagem;
+    
+    // Passamos a imagem da explosao da nave
+    this.imgExplosao = imgExplosao
     
     // Posicao do ovni na tela
     this.x = 0;
@@ -69,6 +72,12 @@ Ovni.prototype = {
             
             // Executa a função de exclusao do colisor do tiro
             this.colisor.excluirSprite(outro);
+            
+            // Criamos uma explosao
+            var explosao = new Explosao(this.context, this.imgExplosao, this.x, this.y);
+            
+            // Registramos a explosao na classe de animacao
+            this.animacao.novoSprite(explosao);
         }
     }
 }

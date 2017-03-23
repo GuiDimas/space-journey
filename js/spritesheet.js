@@ -7,6 +7,10 @@ function Spritesheet(context, imagem, linhas, colunas){
     this.linha = 0;
     this.coluna = 0;
     this.ultimoTempo = 0;
+    
+    // Definimos a variavel que receberá uma função a ser
+    // executada quando o sprite terminar
+    this.fimDoCiclo = null;
 }
 
 Spritesheet.prototype = {
@@ -22,13 +26,18 @@ Spritesheet.prototype = {
         if (agora - this.ultimoTempo < this.intervalo) return;
         
         // Se a coluna não estiver excedendo o limite da imagem, incrementa
-        if (this.coluna < this.numColunas - 1)
+        if (this.coluna < this.numColunas - 1) {
             // Incrementa a coluna, para o próximo frame ser desenhado
             this.coluna++;
         // Senão reseta a coluna
-        else
+        } else {
             // Reseta a coluna para reiniciar a animação
             this.coluna = 0;
+            
+            // Chamamos a função definida que avisa que terminou o ciclo
+            // da nossa spritesheet
+            if(this.fimDoCiclo) this.fimDoCiclo();
+        }
         
         // Guarda a hora da ultima mudanca no atributo
         this.ultimoTempo = agora;
