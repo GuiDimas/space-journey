@@ -15,8 +15,8 @@ function Ovni(context, imagem) {
 
 Ovni.prototype = {
     atualizar: function() {
-        // Incrementa a posição Y, fazendo- se mover para baixo
-        this.y += this.velocidade;
+        // Incrementa a posição Y, fazendo- se mover para baixo, baseado no tempo
+        this.y += this.velocidade * this.animacao.decorrido / 1000;
         
         // Verifica se o sprite já pode ser excluído
         if (this.y > this.context.canvas.height) {

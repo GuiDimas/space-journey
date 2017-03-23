@@ -96,14 +96,14 @@
             // Configurações iniciais do game
             function configuracoesIniciais() {
                 // Configuramos os fundos
-                espaco.velocidade = 3;
-                estrelas.velocidade = 5;
-                nuvens.velocidade = 10;
+                espaco.velocidade = 60;
+                estrelas.velocidade = 150;
+                nuvens.velocidade = 500;
                 
                 // Configuramos e posicionamos a nave
                 nave.x = canvas.width / 2 - imagens.nave.width / 2;
                 nave.y = canvas.height - imagens.nave.height - 10;
-                nave.velocidade = 5;
+                nave.velocidade = 250;
                 
                 // Configuramos os tiros
                 teclado.disparou(ESPACO, function() {
@@ -148,7 +148,7 @@
                 var ovni = new Ovni(context, imgOvni);
                 
                 // Definimos uma velocidade randomica para ele (entre 5 e 15)
-                ovni.velocidade = Math.floor(Math.random() * (15 - 5 + 1));
+                ovni.velocidade = Math.floor(Math.random() * (900 - 450 + 1));
                 
                 // Definimos a posição X que ele vai nascer
                 ovni.x = Math.floor(Math.random() * (canvas.width - imgOvni.width + 1));

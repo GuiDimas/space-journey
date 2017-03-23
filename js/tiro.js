@@ -14,7 +14,7 @@ function Tiro(context, nave){
     this.y = nave.y;
     
     // Velocidade da bala
-    this.velocidade = 10;
+    this.velocidade = 700;
     
     // Cor do tiro
     this.cor = 'yellow';
@@ -22,8 +22,8 @@ function Tiro(context, nave){
 
 Tiro.prototype = {
     atualizar: function() {
-        // Subtraimos Y para a bala subir
-        this.y -= this.velocidade;
+        // Subtraimos Y para a bala subir, baseado no tempo
+        this.y -= this.velocidade * this.animacao.decorrido / 1000;
         
         // Verifica se pode ser excluido
         if (this.y < -this.altura) {

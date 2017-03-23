@@ -17,6 +17,11 @@ function Animacao(context) {
     // Array de processamentos para a exclusão
     this.processamentosExcluir = [];
     
+    // Define o ultimo ciclo processado
+    this.ultimoCiclo = 0;
+    
+    // Define o tempo decorrido entre o ciclo anterior e o atual
+    this.decorrido = 0;    
 }
 
 Animacao.prototype = {
@@ -46,6 +51,16 @@ Animacao.prototype = {
         // Verifica se está ligada a animação para atulizar
         if (!this.ligado) return;
         
+        // Define o tempo atual
+        var agora = new Date().getTime();
+        
+        // Verifica se esse é o primeiro ciclo
+        if (this.ultimoCiclo == 0) this.ultimoCiclo = agora;
+        
+        // Define o tempo decorrido
+        this.decorrido = agora - this.ultimoCiclo;
+        
+        
         // Limpa a tela para o próximo frame (a cada ciclo)
         // Depreciado: Como as imagens de fundo são redesenhadas a todo momento
         //             não é mais necessário limpar a tela a cada novo ciclo.
@@ -66,6 +81,9 @@ Animacao.prototype = {
         
         // Chama a função para processar as exclusões
         this.processarExclusoes();
+        
+        // Atualizamos o ultimo ciclo como sendo o atual
+        this.ultimoCiclo = agora;
         
         // Chamamos o próximo ciclo com o requestAnimationFrame
         // Foi definido assim, pois não podemos invocar a função proximoFrame()
