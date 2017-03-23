@@ -10,6 +10,7 @@
         <script src="js/nave.js"></script>
         <script src="js/ovni.js"></script>
         <script src="js/tiro.js"></script>
+        <script src="js/spritesheet.js"></script>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -36,7 +37,7 @@
                     espaco: 'fundo-espaco.png',
                     estrelas: 'fundo-estrelas.png',
                     nuvens: 'fundo-nuvens.png',
-                    nave: 'nave.png',
+                    nave: 'nave-spritesheet.png',
                     ovni: 'ovni.png'
                 };
                 
@@ -101,8 +102,8 @@
                 nuvens.velocidade = 500;
                 
                 // Configuramos e posicionamos a nave
-                nave.x = canvas.width / 2 - imagens.nave.width / 2;
-                nave.y = canvas.height - imagens.nave.height - 10;
+                nave.x = canvas.width / 2 - 18; // nave: 36x48px (36 / 2 = 18)
+                nave.y = canvas.height - 48 - 10;
                 nave.velocidade = 250;
                 
                 // Configuramos os tiros

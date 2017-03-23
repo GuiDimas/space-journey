@@ -42,7 +42,6 @@ Spritesheet.prototype = {
         
         // Desenha na posição passada por parametro
         // o frame atual
-        this.context.drawImage(this.imagem, larguraQuadro * this.coluna, alturaQuadro * this.linha, larguraQuadro, alturaQuadro, x, y, larguraQuadro, alturaQuadro);
-        
+        this.context.drawImage(this.imagem, larguraQuadro * this.coluna, alturaQuadro * this.linha, larguraQuadro, alturaQuadro, x, y, larguraQuadro, alturaQuadro);        
     }
 }

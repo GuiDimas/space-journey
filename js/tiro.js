@@ -9,8 +9,8 @@ function Tiro(context, nave){
     this.largura = 3;
     this.altura = 15;
     
-    // Posiciona o tiro no bico da nave
-    this.x = nave.x + nave.imagem.width / 2 - this.largura / 2;
+    // Posiciona o tiro no bico da nave (36px que é a larg da img / 2 = 18)
+    this.x = nave.x + 18 - this.largura / 2;
     this.y = nave.y;
     
     // Velocidade da bala
