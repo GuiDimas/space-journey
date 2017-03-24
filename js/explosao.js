@@ -1,3 +1,15 @@
+// Som da explosao
+var SOM_EXPLOSAO = new Audio();
+
+// Setamos o caminho do arquivo
+SOM_EXPLOSAO.src = 'assets/sounds/explosion.mp3';
+
+// Definimos um volume
+SOM_EXPLOSAO.volume = 0.2;
+
+// Carregamos o som
+SOM_EXPLOSAO.load();
+
 function Explosao(context, imagem, x, y) {
     // Passamos o contexto para desenharmos no canvas
     this.context = context;
@@ -30,6 +42,12 @@ function Explosao(context, imagem, x, y) {
         // Executamos a função de callback definida para o fim da explosao
         if (explosao.fimDaExplosao) explosao.fimDaExplosao();
     }
+    
+    // Reiniciamos o som
+    SOM_EXPLOSAO.currentTime = 0.0;
+    
+    // Tocamos o som
+    SOM_EXPLOSAO.play();
 }
 
 Explosao.prototype = {

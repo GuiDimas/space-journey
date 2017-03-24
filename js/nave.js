@@ -1,3 +1,18 @@
+// Som do tiro
+var SOM_NAVE = new Audio();
+
+// Setamos o caminho do arquivo
+SOM_NAVE.src = 'assets/sounds/spaceship.mp3';
+
+// Definimos um volume
+SOM_NAVE.volume = 0.05;
+
+// Setamos como loop
+SOM_NAVE.loop = true;
+
+// Carregamos o som
+SOM_NAVE.load();
+
 function Nave(context, teclado, imagem, imgExplosao) {
     // Passamos o contexto para desenhar no canvas
     this.context = context;
@@ -28,6 +43,12 @@ function Nave(context, teclado, imagem, imgExplosao) {
     
     // Selecionamos o intervalo entre um frame e outro
     this.spritesheet.intervalo = 100;
+    
+    // Reiniciamos o som
+    SOM_NAVE.currentTime = 0.0;
+    
+    // Tocamos o som
+    SOM_NAVE.play();
 }
 
 Nave.prototype = {
@@ -57,6 +78,15 @@ Nave.prototype = {
         if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - 36 - 5) {
             // Incrementamos X para ir para a direita
             this.x += incremento;
+        }
+        
+        if (this.teclado.pressionada(SETA_CIMA) || this.teclado.pressionada(SETA_ESQUERDA) || this.teclado.pressionada(SETA_DIREITA)) {
+            if (SOM_NAVE.volume < 0.4) SOM_NAVE.volume += 0.01;
+        } else if (this.teclado.pressionada(SETA_BAIXO)) {
+            if (SOM_NAVE.volume > 0.035) SOM_NAVE.volume -= 0.01;
+        } else {
+            if (SOM_NAVE.volume > 0.05) SOM_NAVE.volume -= 0.008;
+            else if (SOM_NAVE.volume < 0.05) SOM_NAVE.volume += 0.008;
         }
     },
     

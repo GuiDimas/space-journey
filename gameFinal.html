@@ -27,10 +27,14 @@
             // Variáveis principais
             var imagens, animacao, teclado, colisor, nave, criadorInimigos;
             var totalImagens = 0, carregadas = 0;
+            var musicaFundo;
             
             // Chamamos a função que carrega as imagens
             carregarImagens();
-             
+            
+            // Chamamos a função que carrega as musicas de fundo
+            carregarMusicas();
+            
             // Função que realiza o carregamento das imagens
             function carregarImagens() {
                 // Criamos um objeto, associando o nome ao arquivo de imagem                
@@ -113,6 +117,9 @@
                 
                 // Configurações de pausa
                 teclado.disparou(TECLA_P, pausarJogo);
+                
+                // Configurações do audio
+                teclado.disparou(TECLA_S, controlarMusica);
                 
                 // Criamos os inimigos
                 criacaoInimigos();
@@ -208,6 +215,32 @@
                 } else {
                     teclado.disparou(ESPACO, null);
                 }
+            }
+            
+            // Função que carrega as músicas de fundo
+            function carregarMusicas() {
+                // Criamos o objeto de audio
+                musicaFundo = new Audio();
+                
+                // Definimos o caminho do audio
+                musicaFundo.src = 'assets/sounds/background-1.mp3';
+                
+                // Carregamos o arquivo
+                musicaFundo.load();
+                
+                // Definimos o volume
+                musicaFundo.volume = 0.5;
+                
+                // Definimos que o audio deve ficar em loop
+                musicaFundo.loop = true;
+                
+                // Iniciamos o audio
+                musicaFundo.play();
+            }
+            
+            function controlarMusica(){
+                if (musicaFundo.paused) musicaFundo.play();
+                else musicaFundo.pause();
             }
         </script>
     </body>

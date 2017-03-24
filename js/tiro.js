@@ -1,3 +1,15 @@
+// Som do tiro
+var SOM_TIRO = new Audio();
+
+// Setamos o caminho do arquivo
+SOM_TIRO.src = 'assets/sounds/fire.mp3';
+
+// Definimos um volume
+SOM_TIRO.volume = 0.05;
+
+// Carregamos o som
+SOM_TIRO.load();
+
 function Tiro(context, nave){
     // Passamos um contexto para podermos desenhar no canvas
     this.context = context;
@@ -18,6 +30,12 @@ function Tiro(context, nave){
     
     // Cor do tiro
     this.cor = 'yellow';
+    
+    // Reiniciamos o som
+    SOM_TIRO.currentTime = 0.0;
+    
+    // Tocamos o som
+    SOM_TIRO.play();
 }
 
 Tiro.prototype = {
