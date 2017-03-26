@@ -54,10 +54,10 @@ Painel.prototype = {
         
         // Definimos a cor e a fonte
         c.fillStyle = 'white';
-        c.font = '17px serif';
+        c.font = '15px serif';
         
         // Colocamos a pontuação na tela
-        c.fillText(this.pontuacao + " PTS", 10, c.canvas.width - 10);
+        c.fillText(this.pontuacao + " pontos", 10, c.canvas.width - 10);
         
         // Redefinimos a fonte
         c.font = '12px serif';

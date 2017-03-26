@@ -20,9 +20,18 @@
             Ops! O seu navegador parece não ter suporte para este recurso.. :(
         </canvas>
         <a id="link_jogar" href="javascript: iniciarJogo()">JOGAR</a>
+        <div id="comandos">
+            <ul>
+                <li><b>Instruções:</b></li>
+                <li><b>Setas:</b> Movimentam a nave.</li>
+                <li><b>Espaço:</b> Atira / Inicia o jogo.</li>
+                <li><b>Tecla P:</b> Pausa o jogo.</li>
+                <li><b>Tecla S:</b> Pausa a música de fundo.</li>
+            </ul>
+        </div>
         <script>
             // Versao do game
-            var VERSAO_ATUAL = "1.0.1";
+            var VERSAO_ATUAL = "1.1.0";
             
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
@@ -108,6 +117,9 @@
                 if (carregadas == totalImagens) {
                     iniciarObjetos();
                     mostrarLinkJogar();
+                    
+                    // Configuramos o espaço para iniciar o jogo
+                    teclado.disparou(ESPACO, iniciarJogo);
                 }
             }
             
@@ -166,9 +178,21 @@
                 
                 // Definimos um tratador geral de colisões para contabilizar os pontos
                 colisor.aoColidir = function(o1, o2) {
-                    // Verificamos se é um tiro com o ovini
+                    // Verificamos se é um tiro com o ovni
                     if ((o1 instanceof Tiro && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Tiro)) {
                         painel.pontuacao += 10;
+                    }
+                    
+                    // Verificamos se é um ovni com a nave
+                    if ((o1 instanceof Nave && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Nave)) {
+                        // Verificamos se a pontuação está positiva e tem pontos suficientes
+                        if (painel.pontuacao > 15) {
+                            // Subtraimos a pontuação
+                            painel.pontuacao -= 15;
+                        } else {
+                            // Zeramos a pontuação
+                            painel.pontuacao = 0;
+                        }
                     }
                 }
                 
@@ -361,7 +385,11 @@
                 // Escrevemos GAME OVER
                 context.fillStyle = 'white';
                 context.font = '40px serif';
-                context.fillText("GAME OVER", 130, 250);
+                context.fillText("GAME OVER", 130, 240);
+                
+                // Colocamos a pontuação na tela
+                context.font = '14px serif';
+                context.fillText("PONTUAÇÃO: " + painel.pontuacao, 190, 260);
                 
                 // Restauramos as configurações do contexto
                 context.restore();
@@ -379,6 +407,9 @@
                 
                 // Removemos os inimigos
                 removerInimigos();
+                
+                // Configuramos o espaço para iniciar o jogo
+                teclado.disparou(ESPACO, iniciarJogo);
             }
             
             // Função que percorre os inimigos na animação e os remove

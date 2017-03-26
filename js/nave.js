@@ -48,7 +48,7 @@ function Nave(context, teclado, imagem, imgExplosao) {
     this.acabaramVidas = null;
     
     // Vidas extras
-    this.vidasExtras = 0;
+    this.vidasExtras = 3;
 }
 
 Nave.prototype = {
@@ -80,6 +80,7 @@ Nave.prototype = {
             this.x += incremento;
         }
         
+        // Configuração do som (Para cima e para os lados: aumenta, para baixo: diminui, nenhum: volume normal)
         if (this.teclado.pressionada(SETA_CIMA) || this.teclado.pressionada(SETA_ESQUERDA) || this.teclado.pressionada(SETA_DIREITA)) {
             if (SOM_NAVE.volume < 0.4) SOM_NAVE.volume += 0.01;
         } else if (this.teclado.pressionada(SETA_BAIXO)) {
