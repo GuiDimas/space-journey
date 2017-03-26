@@ -22,7 +22,7 @@
         <a id="link_jogar" href="javascript: iniciarJogo()">JOGAR</a>
         <script>
             // Versao do game
-            var VERSAO_ATUAL = "1.0.0";
+            var VERSAO_ATUAL = "1.0.1";
             
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
@@ -231,6 +231,9 @@
                     // Desativamos os tiros
                     ativarTiro(false);
                     
+                    // Pausamos o som da nave
+                    SOM_NAVE.pause();
+                    
                     // Mostramos uma mensagem de pausado na tela
                     context.save();
                     context.fillStyle = 'rgba(0, 0, 0, 0.4)';
@@ -251,6 +254,9 @@
                     
                     // Ativamos os tiros
                     ativarTiro(true);
+                    
+                    // Iniciamos o som da nave
+                    SOM_NAVE.play();
                 }
             }
             
