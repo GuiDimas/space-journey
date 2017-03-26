@@ -163,6 +163,13 @@
                     alert('game over');
                 }
                 
+                // Definimos um tratador geral de colisões para contabilizar os pontos
+                colisor.aoColidir = function(o1, o2) {
+                    // Verificamos se é um tiro com o ovini
+                    if ((o1 instanceof Tiro && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Tiro)) {
+                        painel.pontuacao += 10;
+                    }
+                }
                 
                 // Criamos os inimigos
                 criacaoInimigos();               
@@ -290,6 +297,9 @@
             function iniciarJogo() {
                 // Escondemos o botão de jogar
                 document.getElementById('link_jogar').style.display = 'none';
+                
+                // Reiniciamos a pontuação
+                painel.pontuacao = 0;
                 
                 // Iniciamos a música de fundo
                 musicaFundo.play();

@@ -13,6 +13,9 @@ function Painel(context, nave) {
     
     // Configuramos para a primeira coluna da spritesheet
     this.spritesheet.coluna = 0;
+    
+    // Criamos a pontuação do jogador
+    this.pontuacao = 0;
 }
 
 Painel.prototype = {
@@ -21,11 +24,14 @@ Painel.prototype = {
     },
     
     desenhar: function() {
+        // Para facilitar a escrita
+        var c = this.context;
+        
         // Salvamos a configuração do contexto
-        this.context.save();
+        c.save();
         
         // Escalamos o contexto para a metade do tamanho
-        this.context.scale(0.5, 0.5);
+        c.scale(0.5, 0.5);
         
         // Coordenadas onde começa o desenho das vidas
         var x = 20;
@@ -38,6 +44,19 @@ Painel.prototype = {
         }
         
         // Restauramos a configuração do contexto
-        this.context.restore();
+        c.restore();
+        
+        // Salvamos as configurações do contexto
+        c.save();
+        
+        // Definimos a cor e a fonte
+        c.fillStyle = 'white';
+        c.font = '17px serif';
+        
+        // Colocamos a pontuação na tela
+        c.fillText(this.pontuacao + " PTS", 10, c.canvas.width - 10);
+        
+        // Restauramos as configurações do contexto
+        c.restore();
     }
 }
