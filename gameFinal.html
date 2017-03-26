@@ -12,6 +12,7 @@
         <script src="js/ovni.js"></script>
         <script src="js/tiro.js"></script>
         <script src="js/explosao.js"></script>
+        <script src="js/painel.js"></script>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -26,7 +27,7 @@
             
             
             // Variáveis principais
-            var imagens, animacao, teclado, colisor, nave, criadorInimigos;
+            var imagens, animacao, teclado, colisor, nave, painel, criadorInimigos;
             var totalImagens = 0, carregadas = 0;
             var musicaFundo;
             
@@ -121,10 +122,14 @@
                 nuvens = new Fundo(context, imagens.nuvens);
                 nave = new Nave(context, teclado, imagens.nave, imagens.explosao);
                 
+                // Iniciamos o painel
+                painel = new Painel(context, nave);
+                
                 // Registramos os objetos entre si
                 animacao.novoSprite(espaco);
                 animacao.novoSprite(estrelas);
                 animacao.novoSprite(nuvens);
+                animacao.novoSprite(painel);
                 animacao.novoSprite(nave);
                 
                 // Registramos a nave como colisor
@@ -146,16 +151,21 @@
                 nuvens.velocidade = 500;
                 
                 // Configuramos e posicionamos a nave
-                nave.x = canvas.width / 2 - 18; // nave: 36x48px (36 / 2 = 18)
-                nave.y = canvas.height - 48 - 10;
+                nave.posicionar();
                 nave.velocidade = 250;
                 
-                // Criamos os inimigos
-                criacaoInimigos();
+                // Configuramos o callback da nave para quando acabarem as vidas
+                nave.acabaramVidas = function() {
+                    // Desligamos a animação
+                    animacao.desligar();
+                    
+                    // Alert de GAME OVER
+                    alert('game over');
+                }
                 
-                // Iniciamos a animacao
-                // Desativada para não iniciar o game antes de clicar no botão
-                //animacao.ligar();                
+                
+                // Criamos os inimigos
+                criacaoInimigos();               
             }
             
             function criacaoInimigos() {
@@ -295,6 +305,12 @@
                 
                 // Configurações do audio
                 teclado.disparou(TECLA_S, controlarMusica);
+                
+                // Reiniciamos o som
+                SOM_NAVE.currentTime = 0.0;
+
+                // Tocamos o som
+                SOM_NAVE.play();
             }
         </script>
     </body>

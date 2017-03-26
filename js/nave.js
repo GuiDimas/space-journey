@@ -44,11 +44,11 @@ function Nave(context, teclado, imagem, imgExplosao) {
     // Selecionamos o intervalo entre um frame e outro
     this.spritesheet.intervalo = 100;
     
-    // Reiniciamos o som
-    SOM_NAVE.currentTime = 0.0;
+    // Função de callback
+    this.acabaramVidas = null;
     
-    // Tocamos o som
-    //SOM_NAVE.play();
+    // Vidas extras
+    this.vidasExtras = 3;
 }
 
 Nave.prototype = {
@@ -150,15 +150,40 @@ Nave.prototype = {
             this.animacao.novoSprite(explosao1);
             this.animacao.novoSprite(explosao2);
             
+            // Pegamos o contexto
+            var nave = this;
+            
             // Registramos um callback para quando a segunda explosao terminar,
             // mostrar a mensagem de game over
             explosao1.fimDaExplosao = function() {
-                // Para  animação
-                this.animacao.desligar();
+                // Decrementamos as vidas
+                nave.vidasExtras--;
                 
-                // Mensagem de game over
-                //alert('GAME OVER');
+                // Verificamos se acabou as vidas
+                if (nave.vidasExtras < 0) {
+                    // Chamamos a função de callback caso as vidas acabem
+                    if (nave.acabaramVidas) nave.acabaramVidas();
+                } else {
+                    // Recoloca a nave na engine
+                    nave.colisor.novoSprite(nave);
+                    nave.animacao.novoSprite(nave);
+                    
+                    // Posicionamos a nave
+                    nave.posicionar();
+                    
+                    // Reiniciamos o som da nave
+                    SOM_NAVE.currentTime = 0.0;
+                    
+                    // Iniciamos o som da nave
+                    SOM_NAVE.play();
+                }
             }
         }
+    },
+    
+    posicionar: function() {
+        var canvas = this.context.canvas;
+        this.x = canvas.width / 2 - 18; // nave: 36x48px (36 / 2 = 18)
+        this.y = canvas.height - 48 - 10;
     }
 }
