@@ -78,7 +78,6 @@
                 
                 // Colocamos o texto "Carregando"
                 context.fillStyle = 'white';
-                context.strokeStyle = 'black';
                 context.font = '40px serif';
                 context.fillText("CARREGANDO", 110, 250);
                 
@@ -159,8 +158,8 @@
                     // Desligamos a animação
                     animacao.desligar();
                     
-                    // Alert de GAME OVER
-                    alert('game over');
+                    // Chamamos a função de game over
+                    gameOver();
                 }
                 
                 // Definimos um tratador geral de colisões para contabilizar os pontos
@@ -298,6 +297,9 @@
                 // Escondemos o botão de jogar
                 document.getElementById('link_jogar').style.display = 'none';
                 
+                // Reiniciamos a criação de inimigos
+                criadorInimigos.ultimoOvni = new Date().getTime();
+                
                 // Reiniciamos a pontuação
                 painel.pontuacao = 0;
                 
@@ -321,6 +323,66 @@
 
                 // Tocamos o som
                 SOM_NAVE.play();
+            }
+            
+            // Função que cuida do game over
+            function gameOver() {
+                // Ativamos os tiros
+                ativarTiro(false);
+                
+                // Configurações de pausa
+                teclado.disparou(TECLA_P, null);
+                
+                // Configurações do audio
+                teclado.disparou(TECLA_S, null);
+                
+                // Paramos a musica e voltamos-a para o inicio
+                musicaFundo.pause();
+                musicaFundo.currentTime = 0.0;
+                
+                // Paramos o som da nave e voltamos para o inicio
+                SOM_NAVE.pause();
+                SOM_NAVE.currentTime = 0.0;
+                
+                // Desenhamos o fundo
+                context.drawImage(imagens.espaco, 0, 0, context.canvas.width, context.canvas.height);
+                
+                // Salvamos as configurações do contexto
+                context.save();
+                
+                // Escrevemos GAME OVER
+                context.fillStyle = 'white';
+                context.font = '40px serif';
+                context.fillText("GAME OVER", 130, 250);
+                
+                // Restauramos as configurações do contexto
+                context.restore();
+                
+                // Mostramos o link jogar
+                mostrarLinkJogar();
+                
+                // Restauramos as configurações da nave
+                nave.vidasExtras = 3;
+                nave.posicionar();
+                
+                // Registramos novamente a nave na animacao e no colisor
+                animacao.novoSprite(nave);
+                colisor.novoSprite(nave);
+                
+                // Removemos os inimigos
+                removerInimigos();
+            }
+            
+            // Função que percorre os inimigos na animação e os remove
+            function removerInimigos() {
+                // Para cada sprite na animação
+                for (var i in animacao.sprites) {
+                    // Se for uma instancia de um Ovine
+                    if (animacao.sprites[i] instanceof Ovni) {
+                        // Registramos a exclusao dele
+                        animacao.excluirSprite(animacao.sprites[i]);
+                    }
+                }
             }
         </script>
     </body>
