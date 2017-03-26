@@ -48,7 +48,7 @@ function Nave(context, teclado, imagem, imgExplosao) {
     SOM_NAVE.currentTime = 0.0;
     
     // Tocamos o som
-    SOM_NAVE.play();
+    //SOM_NAVE.play();
 }
 
 Nave.prototype = {
@@ -131,6 +131,9 @@ Nave.prototype = {
     colidiuCom: function(outro) {
         // Verifica se a colisao ocorreu com um ovini
         if (outro instanceof Ovni) {
+            // Pausamos os sons antes de exlcuir a nave
+            SOM_NAVE.pause();
+            
             // Excluimos a nave e o ovni da animação
             this.animacao.excluirSprite(this);
             this.animacao.excluirSprite(outro);
@@ -154,7 +157,7 @@ Nave.prototype = {
                 this.animacao.desligar();
                 
                 // Mensagem de game over
-                alert('GAME OVER');
+                //alert('GAME OVER');
             }
         }
     }

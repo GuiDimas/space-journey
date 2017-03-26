@@ -18,6 +18,7 @@
         <canvas id="palco" width="500" height="500">
             Ops! O seu navegador parece não ter suporte para este recurso.. :(
         </canvas>
+        <a id="link_jogar" href="javascript: iniciarJogo()">JOGAR</a>
         <script>
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
@@ -66,8 +67,45 @@
             
             // Função que monitora o carregamento das imagens e inicia o jogo
             function carregando(){
+                // Salva as configurações do contexto para não perdermos elas
+                context.save();
+                
+                // Colocamos uma imagem de fundo
+                context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
+                
+                //context.translate(0.5, 0.5);
+                
+                // Colocamos o texto "Carregando"
+                context.fillStyle = 'white';
+                context.strokeStyle = 'black';
+                context.font = '40px serif';
+                context.fillText("CARREGANDO", 110, 250);
+                
+                // Incrementamos a variável de itens carregados
                 carregadas++;
-                if (carregadas == totalImagens) iniciarObjetos();
+                
+                // Desenhamos a barra de loading
+                var tamanhoTotal = 300;
+                var tamanho = carregadas / totalImagens * tamanhoTotal;
+                
+                // Desenhamos a barrinha vazia
+                context.fillStyle = 'black';
+                context.fillRect(99.5, 259.5, tamanhoTotal, 4);
+                context.strokeStyle = 'white';
+                context.lineWidth = 1;
+                context.strokeRect(99.5, 259.5, tamanhoTotal, 4);
+                
+                context.fillStyle = 'white';
+                context.fillRect(99.5, 259.5, tamanho, 4);
+                
+                // Restaura as configurações do contexto
+                context.restore();
+                
+                // Com as imagens carregadas, mostramos o botão jogar
+                if (carregadas == totalImagens) {
+                    iniciarObjetos();
+                    mostrarLinkJogar();
+                }
             }
             
             // Função responsável por iniciar os principais objetos do jogo
@@ -112,20 +150,12 @@
                 nave.y = canvas.height - 48 - 10;
                 nave.velocidade = 250;
                 
-                // Ativamos os tiros
-                ativarTiro(true);
-                
-                // Configurações de pausa
-                teclado.disparou(TECLA_P, pausarJogo);
-                
-                // Configurações do audio
-                teclado.disparou(TECLA_S, controlarMusica);
-                
                 // Criamos os inimigos
                 criacaoInimigos();
                 
                 // Iniciamos a animacao
-                animacao.ligar();                
+                // Desativada para não iniciar o game antes de clicar no botão
+                //animacao.ligar();                
             }
             
             function criacaoInimigos() {
@@ -233,14 +263,38 @@
                 
                 // Definimos que o audio deve ficar em loop
                 musicaFundo.loop = true;
-                
-                // Iniciamos o audio
-                musicaFundo.play();
             }
             
+            // Função para controlar a música de fundo
             function controlarMusica(){
                 if (musicaFundo.paused) musicaFundo.play();
                 else musicaFundo.pause();
+            }
+            
+            // Função para mostrar o link jogar na tela
+            function mostrarLinkJogar() {
+                document.getElementById('link_jogar').style.display = 'block';
+            }
+            
+            // Função que inicia o jogo
+            function iniciarJogo() {
+                // Escondemos o botão de jogar
+                document.getElementById('link_jogar').style.display = 'none';
+                
+                // Iniciamos a música de fundo
+                musicaFundo.play();
+                
+                // Iniciamos a animação
+                animacao.ligar();
+                
+                // Ativamos os tiros
+                ativarTiro(true);
+                
+                // Configurações de pausa
+                teclado.disparou(TECLA_P, pausarJogo);
+                
+                // Configurações do audio
+                teclado.disparou(TECLA_S, controlarMusica);
             }
         </script>
     </body>
