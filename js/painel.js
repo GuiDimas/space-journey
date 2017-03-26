@@ -1,9 +1,12 @@
-function Painel(context, nave) {
+function Painel(context, nave, versao) {
     // Passamos o context para conseguirmos desenhar
     this.context = context;
     
     // Passamos a nave para pegar a quantidade de vidas
     this.nave = nave;
+    
+    // Passamos a versão para ser mostrada na tela
+    this.versao = versao;
     
     // Spritesheet da nave
     this.spritesheet = new Spritesheet(context, nave.imagem, 3, 2);
@@ -55,6 +58,12 @@ Painel.prototype = {
         
         // Colocamos a pontuação na tela
         c.fillText(this.pontuacao + " PTS", 10, c.canvas.width - 10);
+        
+        // Redefinimos a fonte
+        c.font = '12px serif';
+        
+        // Colocamos a versao na tela
+        c.fillText("v" + this.versao, c.canvas.width - 40, c.canvas.height - 10);        
         
         // Restauramos as configurações do contexto
         c.restore();

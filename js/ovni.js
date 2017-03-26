@@ -54,8 +54,7 @@ Ovni.prototype = {
             c.restore();
         }
         
-        return rets;
-        */
+        return rets; */        
     },
     
     colidiuCom: function(outro) {

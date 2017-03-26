@@ -48,7 +48,7 @@ function Nave(context, teclado, imagem, imgExplosao) {
     this.acabaramVidas = null;
     
     // Vidas extras
-    this.vidasExtras = 3;
+    this.vidasExtras = 0;
 }
 
 Nave.prototype = {

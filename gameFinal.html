@@ -21,6 +21,9 @@
         </canvas>
         <a id="link_jogar" href="javascript: iniciarJogo()">JOGAR</a>
         <script>
+            // Versao do game
+            var VERSAO_ATUAL = "1.0.0";
+            
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
             var context = canvas.getContext('2d');
@@ -122,7 +125,7 @@
                 nave = new Nave(context, teclado, imagens.nave, imagens.explosao);
                 
                 // Iniciamos o painel
-                painel = new Painel(context, nave);
+                painel = new Painel(context, nave, VERSAO_ATUAL);
                 
                 // Registramos os objetos entre si
                 animacao.novoSprite(espaco);
@@ -157,7 +160,6 @@
                 nave.acabaramVidas = function() {
                     // Desligamos a animação
                     animacao.desligar();
-                    
                     // Chamamos a função de game over
                     gameOver();
                 }
@@ -326,7 +328,7 @@
             }
             
             // Função que cuida do game over
-            function gameOver() {
+            function gameOver() {                
                 // Ativamos os tiros
                 ativarTiro(false);
                 
@@ -377,10 +379,19 @@
             function removerInimigos() {
                 // Para cada sprite na animação
                 for (var i in animacao.sprites) {
-                    // Se for uma instancia de um Ovine
+                    // Se for uma instancia de um Ovni
                     if (animacao.sprites[i] instanceof Ovni) {
                         // Registramos a exclusao dele
                         animacao.excluirSprite(animacao.sprites[i]);
+                    }
+                }
+                
+                // Para cada sprite no colisor
+                for (var i in colisor.sprites) {
+                    // Se for uma instancia de um Ovni
+                    if (colisor.sprites[i] instanceof Ovni) {
+                        // Registramos a exclusao dele
+                        colisor.excluirSprite(colisor.sprites[i]);
                     }
                 }
             }

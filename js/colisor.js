@@ -39,7 +39,7 @@ Colisor.prototype = {
                 if (!jaTestados[id2]) jaTestados[id2] = [];
                 
                 // Realiza o teste de repetição
-                if (!(jaTestados[id1].indexOf[id2] >= 0 || jaTestados[id2].indexOf[id1] >= 0)) {
+                if (!(jaTestados[id1].indexOf(id2) >= 0 || jaTestados[id2].indexOf(id1) >= 0)) {
                     // Realiza o teste de colisão entre os dois sprites
                     this.testarColisao(this.sprites[i], this.sprites[j]);
                     
