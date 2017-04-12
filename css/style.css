@@ -16,10 +16,10 @@ body {
 #palco {
     background: black;
     display: block;
-    margin: 50px auto 0 auto;
     box-shadow: 1px 1px 10px 0 black;
     position: relative;
     z-index: 0;
+    margin: 10px auto 0 auto;
 }
 
 #link_jogar {
@@ -55,4 +55,23 @@ body {
 
 #comandos ul li:first-child {
     font-size: 19px;
+}
+
+@media screen and (max-width: 510px) {
+    #palco {
+        margin: 0;
+        width: 100%;
+    }
+}
+
+@media screen and (max-height: 660px) {
+    #comandos {
+        display: none;
+    }
+}
+
+@media screen and (min-height: 700px) {
+    #palco {
+        margin: 50px auto 0 auto;
+    }
 }
