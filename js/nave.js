@@ -13,7 +13,7 @@ SOM_NAVE.loop = true;
 // Carregamos o som
 SOM_NAVE.load();
 
-function Nave(context, teclado, imagem, imgExplosao, imgExplosaoAzul) {
+function Nave(context, teclado, imagem, imgExplosao, imgExplosaoAzul, imgTiro) {
     // Passamos o contexto para desenhar no canvas
     this.context = context;
     
@@ -28,6 +28,9 @@ function Nave(context, teclado, imagem, imgExplosao, imgExplosaoAzul) {
     
     // Passamos a imagem da explosao azul que será executada para o ovni
     this.imgExplosaoAzul = imgExplosaoAzul;
+    
+    // Passamos a imagem do tiro
+    this.imgTiro = imgTiro;
     
     // Posicao de inicio em X
     this.x = 0;
@@ -113,7 +116,7 @@ Nave.prototype = {
     
     atirar: function() {
         // Criamos o objeto Tiro
-        var t = new Tiro(this.context, this);
+        var t = new Tiro(this.context, this, this.imgTiro);
         
         // Adicionamos o tiro criado como um novo sprite
         this.animacao.novoSprite(t);
@@ -124,17 +127,34 @@ Nave.prototype = {
     
     retangulosColisao: function() {
         return [
-            { x: this.x + 2, y: this.y + 19, largura: 9, altura: 13 },
-            { x: this.x + 17, y: this.y + 4, largura: 2, altura: 2 },
-            { x: this.x + 14, y: this.y + 8, largura: 8, altura: 6 },
-            { x: this.x + 13, y: this.y + 15, largura: 10, altura: 23 },
-            { x: this.x + 25, y: this.y + 19, largura: 9, altura: 13 }
+            { x: this.x + 23, y: this.y + 3, largura: 1, altura: 3 },
+            { x: this.x + 21, y: this.y + 8, largura: 5, altura: 6 },
+            { x: this.x + 19, y: this.y + 15, largura: 10, altura: 2 },
+            { x: this.x + 11, y: this.y + 24, largura: 4, altura: 9 },
+            { x: this.x + 8, y: this.y + 29, largura: 2, altura: 4 },
+            { x: this.x + 16, y: this.y + 19, largura: 15, altura: 15 },
+            { x: this.x + 32, y: this.y + 24, largura: 4, altura: 9 },
+            { x: this.x + 37, y: this.y + 29, largura: 2, altura: 4 },
         ];
+        
+        /* Para exibir os bounding-boxes de colisao
+            
+        // Desenhamos os retangulos para melhor visualização
+        var c = this.context;
+        
+        for (var i in rets) {
+            c.save();
+            c.strokeStyle = 'red';
+            c.strokeRect(rets[i].x, rets[i].y, rets[i].largura, rets[i].altura);
+            c.restore();
+        }
+        
+        return rets; */
     },
     
     colidiuCom: function(outro) {
         // Verifica se a colisao ocorreu com um ovini
-        if (outro instanceof Ovni) {
+        if (outro instanceof Ovni || outro instanceof Bomba) {
             // Pausamos os sons antes de exlcuir a nave
             SOM_NAVE.pause();
             

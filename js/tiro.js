@@ -10,12 +10,15 @@ SOM_TIRO.volume = 0.05;
 // Carregamos o som
 SOM_TIRO.load();
 
-function Tiro(context, nave){
+function Tiro(context, nave, imagem){
     // Passamos um contexto para podermos desenhar no canvas
     this.context = context;
     
     // Passamos a nave para calcular o ponto de início do tiro
     this.nave = nave;
+    
+    // Passamo a imagem do tiro, para desenharmos na tela
+    this.imagem = imagem;
     
     // Largura e altura da bala
     this.largura = 3;
@@ -54,30 +57,15 @@ Tiro.prototype = {
     },
     
     desenhar: function() {
-        // Variavel do context, para facilitar a escrita
-        var c = this.context;
-        
-        // Salvamos as configurações do contexto
-        c.save();
-        
-        // Setamos a cor
-        c.fillStyle = this.cor;
-        
-        // Desenhamos o tiro
-        c.fillRect(this.x, this.y, this.largura, this.altura);
-        
-        // Restauramos as configurações para não perder o contexto anterior
-        c.restore();
+        // Desenhamos o tiro na tela
+        this.context.drawImage(this.imagem, this.x, this.y, this.imagem.width, this.imagem.height);
     },
     
     retangulosColisao: function() {
         return [
-            {
-                x: this.x,
-                y: this.y,
-                largura: this.largura,
-                altura: this.altura
-            }
+                { x: this.x + 2, y: this.y + 4, largura: 2, altura: 4 },
+                { x: this.x + this.imagem.width / 2 - 1, y: this.y + 2, largura: 2, altura: this.imagem.height - 7 },
+                { x: this.x + this.imagem.width / 2 + 1, y: this.y + 4, largura: 2, altura: 4 },
         ];
     },
     

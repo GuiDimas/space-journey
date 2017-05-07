@@ -10,6 +10,7 @@
         <script src="js/fundo.js"></script>
         <script src="js/nave.js"></script>
         <script src="js/ovni.js"></script>
+        <script src="js/bomba.js"></script>
         <script src="js/tiro.js"></script>
         <script src="js/explosao.js"></script>
         <script src="js/painel.js"></script>
@@ -31,7 +32,7 @@
         </div>
         <script>
             // Versao do game
-            var VERSAO_ATUAL = "1.2.0";
+            var VERSAO_ATUAL = "2.0.0";
             
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
@@ -56,10 +57,12 @@
                     espaco: 'fundo-espaco.png',
                     estrelas: 'fundo-estrelas.png',
                     nuvens: 'fundo-nuvens.png',
-                    nave: 'nave-spritesheet.png',
-                    ovni: 'ovni.png',
-                    explosao: 'explosao.png',
-                    explosaoAzul: 'explosao_azul.png'
+                    nave: 'nave_spritesheet.png',
+                    ovni: 'ovni_spritesheet.png',
+                    explosao: 'explosao_spritesheet.png',
+                    explosaoAzul: 'explosao_azul_spritesheet.png',
+                    bomba: 'bomba_spritesheet.png',
+                    tiro: 'tiro.png'
                 };
                 
                 // Carrega todas as imagens
@@ -135,7 +138,7 @@
                 espaco = new Fundo(context, imagens.espaco);
                 estrelas = new Fundo(context, imagens.estrelas);
                 nuvens = new Fundo(context, imagens.nuvens);
-                nave = new Nave(context, teclado, imagens.nave, imagens.explosao, imagens.explosaoAzul);
+                nave = new Nave(context, teclado, imagens.nave, imagens.explosao, imagens.explosaoAzul, imagens.tiro);
                 
                 // Iniciamos o painel
                 painel = new Painel(context, nave, VERSAO_ATUAL);
@@ -179,13 +182,18 @@
                 
                 // Definimos um tratador geral de colisões para contabilizar os pontos
                 colisor.aoColidir = function(o1, o2) {
-                    // Verificamos se é um tiro com o ovni
-                    if ((o1 instanceof Tiro && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Tiro)) {
+                    // Verificamos se é um tiro com a bomba
+                    if ((o1 instanceof Tiro && o2 instanceof Bomba) || (o1 instanceof Bomba && o2 instanceof Tiro)) {
                         painel.pontuacao += 10;
                     }
                     
-                    // Verificamos se é um ovni com a nave
-                    if ((o1 instanceof Nave && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Nave)) {
+                    // Verificamos se é um tiro com o ovni
+                    if ((o1 instanceof Tiro && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Tiro)) {
+                        painel.pontuacao += 40;
+                    }
+                    
+                    // Verificamos se é uma bomba com a nave
+                    if ((o1 instanceof Nave && o2 instanceof Bomba) || (o1 instanceof Bomba && o2 instanceof Nave)) {
                         // Verificamos se a pontuação está positiva e tem pontos suficientes
                         if (painel.pontuacao > 15) {
                             // Subtraimos a pontuação
@@ -195,26 +203,117 @@
                             painel.pontuacao = 0;
                         }
                     }
+                    
+                    // Verificamos se é um ovni com a nave
+                    if ((o1 instanceof Nave && o2 instanceof Ovni) || (o1 instanceof Ovni && o2 instanceof Nave)) {
+                        // Verificamos se a pontuação está positiva e tem pontos suficientes
+                        if (painel.pontuacao > 50) {
+                            // Subtraimos a pontuação
+                            painel.pontuacao -= 50;
+                        } else {
+                            // Zeramos a pontuação
+                            painel.pontuacao = 0;
+                        }
+                    }
                 }
                 
                 // Criamos os inimigos
-                criacaoInimigos();               
+                criacaoInimigos();
+                
+                // Criamos as recompensas
+                criacaoRecompensas();
             }
             
+            // Funcao responsável por garantir a criação dos inimigos
             function criacaoInimigos() {
                 criadorInimigos = {
+                    tempoOnda: Math.floor(Math.random() * (1 - 1 + 1)) * 1000,
                     ultimoOvni: new Date().getTime(),
+                    ultimaBomba: new Date().getTime(),
+                    ultimaOnda: new Date().getTime(),
+                    liberarOvnis: false,
+                    contador: 0,
+                    opacidade: 0.0,
+                    velocidadeOpacidade: 0.05,
+                    contadorBlink: 0,
                     
                     processar: function() {
                         var agora = new Date().getTime();
-                        var decorrido = agora - this.ultimoOvni;
+                        var decorridoOvni = agora - this.ultimoOvni;
+                        var decorridoBomba = agora - this.ultimaBomba;
+                        var decorridoOnda = agora - this.ultimaOnda;
                         
-                        // Caso ja tenha passado um segundo
-                        if (decorrido > 1000) {
+                        // Se for pra liberar ovnis e ainda não tiver piscado 5 vezes
+                        if (this.liberarOvnis && this.contadorBlink < 10){
+                            
+                            // Se a opacidade + velocidade de aparecimento for menor que 0 ou maior que 1, conta o blink e inverte velocidade
+                            if (this.opacidade + this.velocidadeOpacidade <= 0 || this.opacidade + this.velocidadeOpacidade >= 1) {
+                                // Invertemos a velocidade da opacidade
+                                this.velocidadeOpacidade *= -1;
+                                // Incrementamos o blink;
+                                this.contadorBlink++;
+                            }
+                            
+                            // Incrementamos a opacidade
+                            this.opacidade += this.velocidadeOpacidade;                            
+                            
+                            // Escrevemos a mensagem na tela
+                            context.save();
+                            context.fillStyle = 'rgba(255, 0, 0, ' + this.opacidade + ')';
+                            context.font = '55px Tahoma';
+                            context.fillText("CUIDADO!", 125, 240);
+                            context.font = '27px Tahoma';
+                            context.fillText("OVNIS À CAMINHO", 136, 275);
+                            context.restore();
+                        }
+                        
+                        // Caso ja tenha passado um segundo e meio
+                        if (decorridoBomba > 1200) {
                             // Criamos outro inimigo
+                            //novoOvni();
+                            
+                            // Criamos outra bomba
+                            novaBomba();
+                            //novoOvni();
+                            
+                            // Setamos o ultimo criado como sendo o atual
+                            this.ultimaBomba = agora;
+                        }
+                        
+                        // Liberamos os ovnis
+                        if (decorridoOvni > 700 && this.liberarOvnis) {
+                            // Criamos um novo ovni
                             novoOvni();
+                            
+                            // Incrementamos o contador de ovnis                            
+                            this.contador++;
+                            
                             // Setamos o ultimo criado como sendo o atual
                             this.ultimoOvni = agora;
+                            
+                            // Caso tenha passado 10 ovnis
+                            if(this.contador == 20) this.liberarOvnis = false;
+                        }
+                        
+                        // A cada 60 segundos, uma onda de ovnis aparece
+                        if (decorridoOnda > this.tempoOnda) {
+                            // Reaclculamos um tempo aleatório para a próxima onda
+                            this.tempoOnda = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+                            
+                            // Resetamos o contador de blink
+                            this.contadorBlink = 0;
+                            
+                            // Liberamos os ovnis
+                            this.liberarOvnis = true;
+                            
+                            // Atualizamos o tempo do ultimo ovni (atrasamos 1 segundo)
+                            this.ultimoOvni = new Date().getTime() + 1000;
+                            
+                            // Resetamos o contador de ovnis
+                            this.contador = 0;
+                            
+                            // Definimos o tempo da ultima onda como sendo a de agora
+                            this.ultimaOnda = agora;
                         }
                     }
                 };
@@ -224,6 +323,7 @@
                 animacao.novoProcessamento(criadorInimigos);
             }
             
+            // Funcao que instancia e registra um novo ovni
             function novoOvni() {
                 // Capturamos a imagem do ovni
                 var imgOvni = imagens.ovni;
@@ -232,10 +332,10 @@
                 var ovni = new Ovni(context, imgOvni, imagens.explosaoAzul);
                 
                 // Definimos uma velocidade randomica para ele (entre 5 e 15)
-                ovni.velocidade = Math.floor(Math.random() * (900 - 450 + 1));
+                ovni.velocidade = Math.floor(Math.random() * (600 - 450 + 1) + 450);
                 
                 // Definimos a posição X que ele vai nascer
-                ovni.x = Math.floor(Math.random() * (canvas.width - imgOvni.width + 1));
+                ovni.x = Math.floor(Math.random() * (canvas.width - imgOvni.width / 8 + 1));
                 
                 // Descontamos a altura do Ovni para ele nascer escondido
                 ovni.y = -imgOvni.height;
@@ -245,6 +345,46 @@
                 
                 // Registramos o ovni como um colisor
                 colisor.novoSprite(ovni);
+            }
+            
+            // Funcao que instancia e registra uma nova bomba
+            function novaBomba() {
+                // Capturamos a imagem da bomba
+                var imgBomba = imagens.bomba;
+                
+                // Criamos uma nova Bomba
+                var bomba = new Bomba(context, imgBomba, imagens.explosaoAzul);
+                
+                // Definimos uma velocidade randomica para ela (entre 450 e 900)
+                bomba.velocidadeY = Math.floor(Math.random() * (500 - 200 + 1) + 200);
+                
+                // Definimos uma velocidade randomica para a posição X da bomba
+                bomba.velocidadeX = Math.floor(Math.random() * (3 - 0.5 + 1) + 3);
+                
+                // Iniciamos randomicamente a posição para qual ela deve ir
+                if (Math.round(Math.random()) == 1) bomba.velocidadeX *= -1;
+                
+                // Definimos a posição X que ele vai nascer
+                bomba.x = Math.floor(Math.random() * (canvas.width - imgBomba.width + 1));
+                
+                // Descontamos a altura da Bomba para ela nascer escondida
+                bomba.y = -imgBomba.height;
+                
+                // Registramos o inimigo na classe de animacao
+                animacao.novoSprite(bomba);
+                
+                // Registramos a bomba como um colisor
+                colisor.novoSprite(bomba);
+            }
+            
+            // Função responsável por gerenciar as recompensas
+            function criacaoRecompensas() {
+                /*
+                    Criamos uma nova classe, exemplo: Vida
+                    Colocamos um som para quando colidir com a nave e
+                    assim que houver a colisão, o jogador ganha mais uma nave
+                    para continuar sua jornada.
+                */                
             }
             
             // Função responsável por pausar jogo
@@ -270,9 +410,11 @@
                     context.strokeText("PAUSADO", 133, 260);
                     context.restore();
                 } else {
-                    // Reiniciamos o tempo de criação do último Ovni
-                    // para que um novo não nasça assim que despausarmos
-                    criadorInimigos.ultimoOvni = new Date().getTime();
+                    // Reiniciamos o tempo de criação dos inimigos
+                    // para que não de problema quando despausarmos
+                    criadorInimigos.ultimoOvni =  new Date().getTime();
+                    criadorInimigos.ultimaBomba = new Date().getTime();
+                    criadorInimigos.ultimaOnda = new Date().getTime();
                     
                     // Ligamos a animação
                     animacao.ligar();
@@ -331,7 +473,9 @@
                 document.getElementById('link_jogar').style.display = 'none';
                 
                 // Reiniciamos a criação de inimigos
-                criadorInimigos.ultimoOvni = new Date().getTime();
+                criadorInimigos.ultimoOvni =  new Date().getTime();
+                criadorInimigos.ultimaBomba = new Date().getTime();
+                criadorInimigos.ultimaOnda = new Date().getTime();
                 
                 // Reiniciamos a pontuação
                 painel.pontuacao = 0;
