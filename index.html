@@ -58,7 +58,8 @@
                     nuvens: 'fundo-nuvens.png',
                     nave: 'nave-spritesheet.png',
                     ovni: 'ovni.png',
-                    explosao: 'explosao.png'
+                    explosao: 'explosao.png',
+                    explosaoAzul: 'explosao_azul.png'
                 };
                 
                 // Carrega todas as imagens
@@ -134,7 +135,7 @@
                 espaco = new Fundo(context, imagens.espaco);
                 estrelas = new Fundo(context, imagens.estrelas);
                 nuvens = new Fundo(context, imagens.nuvens);
-                nave = new Nave(context, teclado, imagens.nave, imagens.explosao);
+                nave = new Nave(context, teclado, imagens.nave, imagens.explosao, imagens.explosaoAzul);
                 
                 // Iniciamos o painel
                 painel = new Painel(context, nave, VERSAO_ATUAL);
@@ -228,7 +229,7 @@
                 var imgOvni = imagens.ovni;
                 
                 // Criamos um novo Ovni
-                var ovni = new Ovni(context, imgOvni, imagens.explosao);
+                var ovni = new Ovni(context, imgOvni, imagens.explosaoAzul);
                 
                 // Definimos uma velocidade randomica para ele (entre 5 e 15)
                 ovni.velocidade = Math.floor(Math.random() * (900 - 450 + 1));

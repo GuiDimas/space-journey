@@ -10,7 +10,7 @@ html {
 body {
     /*background: #DDDDDD;*/
     background: white;
-    background: linear-gradient(to bottom, rgb(187, 184, 254), rgb(250, 229, 263)) 100% 100%;
+    background: linear-gradient(to bottom, rgb(30, 30, 30), rgb(35, 35, 35)) 100% 100%;
 }
 
 #palco {
@@ -43,9 +43,10 @@ body {
 #comandos {
     width: 478px;
     margin: 10px auto 0 auto;
-    border: 1px dashed #333333;
+    border: 1px dashed #777777;
     padding: 0px 10px;
     font: 16px sans-serif;
+    color: #AAAAAA;
 }
 
 #comandos ul {

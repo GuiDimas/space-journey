@@ -22,10 +22,10 @@ function Explosao(context, imagem, x, y) {
     this.y = y;
     
     // Criamos o spritesheet
-    this.spritesheet = new Spritesheet(context, imagem, 1, 5);
+    this.spritesheet = new Spritesheet(context, imagem, 1, 17);
     
     // Definimos o intervalo de troca do spritesheet
-    this.spritesheet.intervalo = 75;
+    this.spritesheet.intervalo = 20;
     
     // Definimos uma variavel que receberá uma função
     // que deve ser executada assim que a explosao terminar

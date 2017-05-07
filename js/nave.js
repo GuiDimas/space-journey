@@ -13,7 +13,7 @@ SOM_NAVE.loop = true;
 // Carregamos o som
 SOM_NAVE.load();
 
-function Nave(context, teclado, imagem, imgExplosao) {
+function Nave(context, teclado, imagem, imgExplosao, imgExplosaoAzul) {
     // Passamos o contexto para desenhar no canvas
     this.context = context;
     
@@ -26,6 +26,9 @@ function Nave(context, teclado, imagem, imgExplosao) {
     // Passamos a imagem da explosao que será executada
     this.imgExplosao = imgExplosao;
     
+    // Passamos a imagem da explosao azul que será executada para o ovni
+    this.imgExplosaoAzul = imgExplosaoAzul;
+    
     // Posicao de inicio em X
     this.x = 0;
     
@@ -36,7 +39,7 @@ function Nave(context, teclado, imagem, imgExplosao) {
     this.velocidade = 0;
     
     // Configuramos a spritesheet da nave
-    this.spritesheet = new Spritesheet(context, imagem, 3, 2);
+    this.spritesheet = new Spritesheet(context, imagem, 3, 5);
     
     // Selecionamos a linha da spritesheet
     this.spritesheet.linha = 0;
@@ -75,7 +78,7 @@ Nave.prototype = {
         }
         
         // Se pressionarmos a tecla para a direita                                      // .- Tamanho da imagem
-        if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - 36 - 5) {
+        if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - 48 - 5) {
             // Incrementamos X para ir para a direita
             this.x += incremento;
         }
@@ -102,7 +105,7 @@ Nave.prototype = {
         
         // Verifica se está indo para trás
         if (this.teclado.pressionada(SETA_BAIXO)) {
-            this.spritesheet.coluna = 1;
+            this.spritesheet.coluna = 2;
         } else {
             this.spritesheet.proximoQuadro();
         }
@@ -145,7 +148,7 @@ Nave.prototype = {
             
             // Criamos 2 explosoes
             var explosao1 = new Explosao(this.context, this.imgExplosao, this.x, this.y);
-            var explosao2 = new Explosao(this.context, this.imgExplosao, outro.x, outro.y);
+            var explosao2 = new Explosao(this.context, this.imgExplosaoAzul, outro.x, outro.y);
             
             // Registramos as explosoes para serem exibidas
             this.animacao.novoSprite(explosao1);
@@ -184,7 +187,7 @@ Nave.prototype = {
     
     posicionar: function() {
         var canvas = this.context.canvas;
-        this.x = canvas.width / 2 - 18; // nave: 36x48px (36 / 2 = 18)
+        this.x = canvas.width / 2 - 24; // nave: 48x48px (48 / 2 = 24)
         this.y = canvas.height - 48 - 10;
     }
 }

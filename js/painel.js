@@ -9,13 +9,13 @@ function Painel(context, nave, versao) {
     this.versao = versao;
     
     // Spritesheet da nave
-    this.spritesheet = new Spritesheet(context, nave.imagem, 3, 2);
+    this.spritesheet = new Spritesheet(context, nave.imagem, 3, 5);
     
     // Configuramos para a primeira linha da spritesheet
     this.spritesheet.linha = 0;
     
     // Configuramos para a primeira coluna da spritesheet
-    this.spritesheet.coluna = 0;
+    this.spritesheet.coluna = 2;
     
     // Criamos a pontuação do jogador
     this.pontuacao = 0;
