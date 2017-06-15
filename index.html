@@ -227,7 +227,7 @@
             // Funcao responsável por garantir a criação dos inimigos
             function criacaoInimigos() {
                 criadorInimigos = {
-                    tempoOnda: Math.floor(Math.random() * (1 - 1 + 1)) * 1000,
+                    tempoOnda: Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000,
                     ultimoOvni: new Date().getTime(),
                     ultimaBomba: new Date().getTime(),
                     ultimaOnda: new Date().getTime(),
