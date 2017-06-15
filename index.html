@@ -14,6 +14,7 @@
         <script src="js/tiro.js"></script>
         <script src="js/explosao.js"></script>
         <script src="js/painel.js"></script>
+        <script src="js/vida.js"></script>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -32,7 +33,7 @@
         </div>
         <script>
             // Versao do game
-            var VERSAO_ATUAL = "2.0.0";
+            var VERSAO_ATUAL = "2.1.0";
             
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
@@ -40,7 +41,7 @@
             
             
             // Variáveis principais
-            var imagens, animacao, teclado, colisor, nave, painel, criadorInimigos;
+            var imagens, animacao, teclado, colisor, nave, painel, criadorInimigos, criadorVidas;
             var totalImagens = 0, carregadas = 0;
             var musicaFundo;
             
@@ -62,7 +63,8 @@
                     explosao: 'explosao_spritesheet.png',
                     explosaoAzul: 'explosao_azul_spritesheet.png',
                     bomba: 'bomba_spritesheet.png',
-                    tiro: 'tiro.png'
+                    tiro: 'tiro.png',
+                    vida: 'vida-extra.png'
                 };
                 
                 // Carrega todas as imagens
@@ -88,7 +90,7 @@
                 context.save();
                 
                 // Colocamos uma imagem de fundo
-                context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
+                context.drawImage(imagens.espaco, 0, 0, canvas.width, imagens.espaco.height);
                 
                 //context.translate(0.5, 0.5);
                 
@@ -146,9 +148,9 @@
                 // Registramos os objetos entre si
                 animacao.novoSprite(espaco);
                 animacao.novoSprite(estrelas);
+                animacao.novoSprite(nave);
                 animacao.novoSprite(nuvens);
                 animacao.novoSprite(painel);
-                animacao.novoSprite(nave);
                 
                 // Registramos a nave como colisor
                 colisor.novoSprite(nave);
@@ -215,6 +217,12 @@
                             painel.pontuacao = 0;
                         }
                     }
+                    
+                    // Verficamos se é uma vida com a nave
+                    if ((o1 instanceof Nave && o2 instanceof Vida) || (o1 instanceof Vida && o2 instanceof Nave)) {
+                        if (nave.vidasExtras < 5)
+                            adicionarVida();
+                    }
                 }
                 
                 // Criamos os inimigos
@@ -236,6 +244,7 @@
                     opacidade: 0.0,
                     velocidadeOpacidade: 0.05,
                     contadorBlink: 0,
+                    intervaloOvnisOnda: 700,
                     
                     processar: function() {
                         var agora = new Date().getTime();
@@ -280,19 +289,24 @@
                             this.ultimaBomba = agora;
                         }
                         
+                        
                         // Liberamos os ovnis
-                        if (decorridoOvni > 700 && this.liberarOvnis) {
+                        if (decorridoOvni > this.intervaloOvnisOnda && this.liberarOvnis) {
+                            // Ovnis aparecem mais rápido no final das ondas
+                            if (this.contador > 20 && this.contador < 35) this.intervaloOvnisOnda = 300;
+                            else this.intervaloOvnisOnda = 700;
+                            
                             // Criamos um novo ovni
                             novoOvni();
-                            
+
                             // Incrementamos o contador de ovnis                            
                             this.contador++;
                             
                             // Setamos o ultimo criado como sendo o atual
                             this.ultimoOvni = agora;
                             
-                            // Caso tenha passado 10 ovnis
-                            if(this.contador == 20) this.liberarOvnis = false;
+                            // Caso tenha passado 30 ovnis
+                            if(this.contador == 35) this.liberarOvnis = false;
                         }
                         
                         // A cada 60 segundos, uma onda de ovnis aparece
@@ -321,6 +335,50 @@
                 // Registramos a criação de inimigos como
                 // uma nova tarefa para a animação
                 animacao.novoProcessamento(criadorInimigos);
+            }
+            
+            // Função responsável por gerenciar as recompensas
+            function criacaoRecompensas() {
+                criadorVidas = {
+                    intervaloVidas: Math.floor(Math.random() * (180 - 60 + 1) + 60) * 1000, // Uma acada entre 1 e 3 minutos
+                    ultimaVida: new Date().getTime(),
+                    
+                    processar: function() {
+                        var agora = new Date().getTime();
+                        var decorrido = agora - this.ultimaVida;
+                        
+                        // Se o tempo decorrido for igual ou maior o predefinido para uma nova vida
+                        if (decorrido >= this.intervaloVidas){                            
+                            // Requisitamos a criação da nova vida
+                            novaVida();
+                            
+                            // Definimos o ultimo tempo de criação como sendo o atual
+                            this.ultimaVida = agora;
+                        }
+                    }
+                };                
+                
+                // Registramos a criação da vida como um processamento da animação
+                animacao.novoProcessamento(criadorVidas);
+            }
+            
+            // Funcao que instancia e regista uma nova vida
+            function novaVida() {
+                // Capturamos a imagem da vida
+                var imgVida = imagens.vida;
+                
+                // Criamos a vida
+                var vida = new Vida(context, imgVida);
+                
+                // Definimos a posição x dela na tela randomicamente
+                vida.x = Math.floor(Math.random() * (canvas.width - imgVida.width + 1));
+                
+                // Escondemos-a pra cima do palco
+                vida.y = -(imgVida.height);
+                
+                // Registramos como animada e como colidivel
+                animacao.novoSprite(vida);
+                colisor.novoSprite(vida);
             }
             
             // Funcao que instancia e registra um novo ovni
@@ -377,16 +435,6 @@
                 colisor.novoSprite(bomba);
             }
             
-            // Função responsável por gerenciar as recompensas
-            function criacaoRecompensas() {
-                /*
-                    Criamos uma nova classe, exemplo: Vida
-                    Colocamos um som para quando colidir com a nave e
-                    assim que houver a colisão, o jogador ganha mais uma nave
-                    para continuar sua jornada.
-                */                
-            }
-            
             // Função responsável por pausar jogo
             function pausarJogo() {
                 if (animacao.ligado) {
@@ -415,6 +463,7 @@
                     criadorInimigos.ultimoOvni =  new Date().getTime();
                     criadorInimigos.ultimaBomba = new Date().getTime();
                     criadorInimigos.ultimaOnda = new Date().getTime();
+                    criadorVidas.ultimaVida = new Date().getTime();
                     
                     // Ligamos a animação
                     animacao.ligar();
@@ -450,7 +499,7 @@
                 musicaFundo.load();
                 
                 // Definimos o volume
-                musicaFundo.volume = 0.5;
+                musicaFundo.volume = 0.1;
                 
                 // Definimos que o audio deve ficar em loop
                 musicaFundo.loop = true;
@@ -465,6 +514,16 @@
             // Função para mostrar o link jogar na tela
             function mostrarLinkJogar() {
                 document.getElementById('link_jogar').style.display = 'block';
+            }
+            
+            // Função para adicionar uma nova vida
+            function adicionarVida() {
+                nave.vidasExtras++;
+            }
+            
+            // Função que aciona onda de ovnis imediatamente
+            function acionarOnda(){
+                criadorInimigos.ultimaOnda = 0;
             }
             
             // Função que inicia o jogo
@@ -495,6 +554,15 @@
                 // Configurações do audio
                 teclado.disparou(TECLA_S, controlarMusica);
                 
+                // Novos itens de vida
+                teclado.disparou(TECLA_F4, novaVida);
+                
+                // Acionar onda de ovnis
+                teclado.disparou(TECLA_F8, acionarOnda);
+                
+                // Adicionar vidas
+                teclado.disparou(TECLA_F9, adicionarVida);
+                
                 // Reiniciamos o som
                 SOM_NAVE.currentTime = 0.0;
 
@@ -522,7 +590,7 @@
                 SOM_NAVE.currentTime = 0.0;
                 
                 // Desenhamos o fundo
-                context.drawImage(imagens.espaco, 0, 0, context.canvas.width, context.canvas.height);
+                context.drawImage(imagens.espaco, 0, 0, context.canvas.width, imagens.espaco.height);
                 
                 // Salvamos as configurações do contexto
                 context.save();

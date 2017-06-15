@@ -6,6 +6,9 @@ var SETA_BAIXO = 40;
 var ESPACO = 32;
 var TECLA_P = 80;
 var TECLA_S = 83;
+var TECLA_F4 = 115;
+var TECLA_F8 = 119;
+var TECLA_F9 = 120;
 
 function Teclado(elemento){
     // Passamos o elemento qual queremos atribuir um listener
