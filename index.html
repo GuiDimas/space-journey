@@ -34,7 +34,7 @@
         </div>
         <script>
             // Versao do game
-            var VERSAO_ATUAL = "2.1.2";
+            var VERSAO_ATUAL = "2.3.0";
             
             // Encontra o canvas e o contexo 2D
             var canvas = document.getElementById('palco');
@@ -42,7 +42,7 @@
             
             
             // Variáveis principais
-            var imagens, animacao, teclado, colisor, nave, painel, criadorInimigos, criadorVidas;
+            var imagens, animacao, teclado, colisor, nave, painel, criadorInimigos, criadorVidas, atiradorMovel;
             var totalImagens = 0, carregadas = 0;
             var musicaFundo;
             
@@ -235,13 +235,37 @@
                 // Verificamos se estamos em um ambiente móvel
                 if (dispositivoMovel()) {
                     nave.touch = new Touch(canvas, window);
+                    configuracaoMovel();
                 }
             }
             
+            // Funcao que verifica se estamos em um ambiente movel
             function dispositivoMovel() {
                 if(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i))
                     return true;
                 return false;
+            }
+            
+            // Funcao responsavel por garantir a interface movel
+            function configuracaoMovel() {
+                var atiradorMovel = {
+                    intervaloTiro: 320,
+                    ultimoTiro: new Date().getTime(),
+                    
+                    processar: function() {
+                        var agora = new Date().getTime();
+                        var intervalo = agora - this.ultimoTiro;
+                        
+                        // Se já passou mais tempo do que deveria
+                        if (intervalo >= this.intervaloTiro) {
+                            nave.atirar();
+                            this.ultimoTiro = agora;
+                        }
+                    }
+                }
+                
+                // Registramos o atirador
+                animacao.novoProcessamento(atiradorMovel);
             }
             
             // Funcao responsável por garantir a criação dos inimigos

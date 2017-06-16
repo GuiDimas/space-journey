@@ -66,35 +66,52 @@ Nave.prototype = {
         var incremento = this.velocidade * this.animacao.decorrido / 1000;
         
         // Se pressionarmos a seta para cima
-        if ((this.teclado.pressionada(SETA_CIMA) || (this.touch && this.touch.tocando(TOUCH_CIMA))) && this.y > 5) {
+        if (this.teclado.pressionada(SETA_CIMA) && this.y > 5) {
             // Decrementamos Y para ir para cima
             this.y -= incremento;
         }
         
-        // Se pressionarmos a tecla para baixo                                                                                         // .- Tamanho da imagem
-        if ((this.teclado.pressionada(SETA_BAIXO) || (this.touch && this.touch.tocando(TOUCH_BAIXO))) && this.y < this.context.canvas.height - 48 - 5) {
+        // Se pressionarmos a tecla para baixo                                         // .- Tamanho da imagem
+        if (this.teclado.pressionada(SETA_BAIXO) && this.y < this.context.canvas.height - 48 - 5) {
             // Incrementamos Y para ir para baixo
             this.y += incremento;
         }
         
         // Se pressionarmos a tecla para a esquerda
-        if ((this.teclado.pressionada(SETA_ESQUERDA) || (this.touch && this.touch.tocando(TOUCH_ESQUERDA))) && this.x > 5) {
+        if (this.teclado.pressionada(SETA_ESQUERDA) && this.x > 5) {
             // Decrementamos X para ir para a esquerda
-            this.x -= incremento;      
+            this.x -= incremento;
         }
         
-        // Se pressionarmos a tecla para a direita                                                                                        // .- Tamanho da imagem
-        if ((this.teclado.pressionada(SETA_DIREITA) || (this.touch && this.touch.tocando(TOUCH_DIREITA))) && this.x < this.context.canvas.width - 48 - 5) {
+        // Se pressionarmos a tecla para a direita                                      // .- Tamanho da imagem
+        if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - 48 - 5) {
             // Incrementamos X para ir para a direita
             this.x += incremento;
         }
         
+        // Interface touch
+        if (this.touch && this.touch.toque) {
+            var t = this.touch.toque;
+            
+            incremento = (incremento * (Math.abs(t.clientX - this.x - this.context.canvas.offsetLeft) + Math.abs(t.clientY - this.y - this.context.canvas.offsetTop)) / 100) + incremento / 1.5;
+            
+            // Anda para a esquerda
+            if (this.x > (t.clientX - this.context.canvas.offsetLeft - 48 / 2) && this.x > 5) this.x -= incremento;
+            
+            // Anda para a direita
+            if (this.x < (t.clientX - this.context.canvas.offsetLeft - 48 / 2) && this.x < this.context.canvas.width - 48 - 5) this.x += incremento;
+            
+            // Anda para cima
+            if (this.y > (t.clientY - this.context.canvas.offsetTop - 48 / 2) && this.y > 5) this.y -= incremento;
+            
+            // Anda para baixo
+            if (this.y < (t.clientY - this.context.canvas.offsetTop - 48 / 2) && this.y < this.context.canvas.height - 48 - 5) this.y += incremento;
+        }
+        
         // Configuração do som (Para cima e para os lados: aumenta, para baixo: diminui, nenhum: volume normal)
-        if (this.teclado.pressionada(SETA_CIMA) || this.teclado.pressionada(SETA_ESQUERDA) || this.teclado.pressionada(SETA_DIREITA) ||
-            (this.touch && (this.touch.tocando(TOUCH_CIMA) || this.touch.tocando(TOUCH_ESQUERDA) || this.touch.tocando(TOUCH_DIREITA)))
-           ) {
+        if (this.teclado.pressionada(SETA_CIMA) || this.teclado.pressionada(SETA_ESQUERDA) || this.teclado.pressionada(SETA_DIREITA)) {
             if (SOM_NAVE.volume < 0.4) SOM_NAVE.volume += 0.01;
-        } else if (this.teclado.pressionada(SETA_BAIXO) || (this.touch && (this.touch.tocando(TOUCH_BAIXO)))) {
+        } else if (this.teclado.pressionada(SETA_BAIXO)) {
             if (SOM_NAVE.volume > 0.035) SOM_NAVE.volume -= 0.01;
         } else {
             if (SOM_NAVE.volume > 0.05) SOM_NAVE.volume -= 0.008;
