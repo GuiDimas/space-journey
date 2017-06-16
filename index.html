@@ -5,6 +5,7 @@
         <title>Space Journey - Canvas HTML5</title>
         <script src="js/animacao.js"></script>
         <script src="js/teclado.js"></script>
+        <script src="js/touch.js"></script>
         <script src="js/colisor.js"></script>
         <script src="js/spritesheet.js"></script>
         <script src="js/fundo.js"></script>
@@ -140,7 +141,7 @@
                 espaco = new Fundo(context, imagens.espaco);
                 estrelas = new Fundo(context, imagens.estrelas);
                 nuvens = new Fundo(context, imagens.nuvens);
-                nave = new Nave(context, teclado, imagens.nave, imagens.explosao, imagens.explosaoAzul, imagens.tiro);
+                nave = new Nave(context, teclado, null, imagens.nave, imagens.explosao, imagens.explosaoAzul, imagens.tiro);
                 
                 // Iniciamos o painel
                 painel = new Painel(context, nave, VERSAO_ATUAL);
@@ -230,6 +231,17 @@
                 
                 // Criamos as recompensas
                 criacaoRecompensas();
+                
+                // Verificamos se estamos em um ambiente móvel
+                if (dispositivoMovel()) {
+                    nave.touch = new Touch(canvas, window);
+                }
+            }
+            
+            function dispositivoMovel() {
+                if(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i))
+                    return true;
+                return false;
             }
             
             // Funcao responsável por garantir a criação dos inimigos
@@ -562,6 +574,11 @@
                 
                 // Adicionar vidas
                 teclado.disparou(TECLA_F9, adicionarVida);
+                
+                // Reiniciamos os touchs se estivermos no mobile
+                if (dispositivoMovel()) {
+                    nave.touch.reiniciar();
+                }
                 
                 // Reiniciamos o som
                 SOM_NAVE.currentTime = 0.0;

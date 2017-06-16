@@ -13,12 +13,15 @@ SOM_NAVE.loop = true;
 // Carregamos o som
 SOM_NAVE.load();
 
-function Nave(context, teclado, imagem, imgExplosao, imgExplosaoAzul, imgTiro) {
+function Nave(context, teclado, touch, imagem, imgExplosao, imgExplosaoAzul, imgTiro) {
     // Passamos o contexto para desenhar no canvas
     this.context = context;
     
     // Passamos o teclado para capturar os botoes
     this.teclado = teclado;
+    
+    // Passamos o touch para capturar os toques
+    this.touch = touch;
     
     // Passamos a imagem para carregar no canvas
     this.imagem = imagem;
@@ -63,33 +66,35 @@ Nave.prototype = {
         var incremento = this.velocidade * this.animacao.decorrido / 1000;
         
         // Se pressionarmos a seta para cima
-        if (this.teclado.pressionada(SETA_CIMA) && this.y > 5) {
+        if ((this.teclado.pressionada(SETA_CIMA) || (this.touch && this.touch.tocando(TOUCH_CIMA))) && this.y > 5) {
             // Decrementamos Y para ir para cima
             this.y -= incremento;
         }
         
-        // Se pressionarmos a tecla para baixo                                         // .- Tamanho da imagem
-        if (this.teclado.pressionada(SETA_BAIXO) && this.y < this.context.canvas.height - 48 - 5) {
+        // Se pressionarmos a tecla para baixo                                                                                         // .- Tamanho da imagem
+        if ((this.teclado.pressionada(SETA_BAIXO) || (this.touch && this.touch.tocando(TOUCH_BAIXO))) && this.y < this.context.canvas.height - 48 - 5) {
             // Incrementamos Y para ir para baixo
             this.y += incremento;
         }
         
         // Se pressionarmos a tecla para a esquerda
-        if (this.teclado.pressionada(SETA_ESQUERDA) && this.x > 5) {
+        if ((this.teclado.pressionada(SETA_ESQUERDA) || (this.touch && this.touch.tocando(TOUCH_ESQUERDA))) && this.x > 5) {
             // Decrementamos X para ir para a esquerda
             this.x -= incremento;      
         }
         
-        // Se pressionarmos a tecla para a direita                                      // .- Tamanho da imagem
-        if (this.teclado.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - 48 - 5) {
+        // Se pressionarmos a tecla para a direita                                                                                        // .- Tamanho da imagem
+        if ((this.teclado.pressionada(SETA_DIREITA) || (this.touch && this.touch.tocando(TOUCH_DIREITA))) && this.x < this.context.canvas.width - 48 - 5) {
             // Incrementamos X para ir para a direita
             this.x += incremento;
         }
         
         // Configuração do som (Para cima e para os lados: aumenta, para baixo: diminui, nenhum: volume normal)
-        if (this.teclado.pressionada(SETA_CIMA) || this.teclado.pressionada(SETA_ESQUERDA) || this.teclado.pressionada(SETA_DIREITA)) {
+        if (this.teclado.pressionada(SETA_CIMA) || this.teclado.pressionada(SETA_ESQUERDA) || this.teclado.pressionada(SETA_DIREITA) ||
+            (this.touch && (this.touch.tocando(TOUCH_CIMA) || this.touch.tocando(TOUCH_ESQUERDA) || this.touch.tocando(TOUCH_DIREITA)))
+           ) {
             if (SOM_NAVE.volume < 0.4) SOM_NAVE.volume += 0.01;
-        } else if (this.teclado.pressionada(SETA_BAIXO)) {
+        } else if (this.teclado.pressionada(SETA_BAIXO) || (this.touch && (this.touch.tocando(TOUCH_BAIXO)))) {
             if (SOM_NAVE.volume > 0.035) SOM_NAVE.volume -= 0.01;
         } else {
             if (SOM_NAVE.volume > 0.05) SOM_NAVE.volume -= 0.008;
