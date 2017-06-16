@@ -1,3 +1,15 @@
+// Som da vida
+var SOM_VIDA = new Audio();
+
+// Setamos o caminho do arquivo
+SOM_VIDA.src = 'assets/sounds/life.mp3';
+
+// Definimos um volume
+SOM_VIDA.volume = 0.2;
+
+// Carregamos o som
+SOM_VIDA.load();
+
 function Vida(context, imagem) {
     // Passamos um contexto para desenharmos
     this.context = context;
@@ -13,6 +25,9 @@ function Vida(context, imagem) {
     
     // Definimos uma velocidade padrão
     this.velocidade = 150;
+    
+    // Reiniciamos o som
+    SOM_VIDA.currentTime = 0.0;
 }
 
 Vida.prototype = {
@@ -62,6 +77,9 @@ Vida.prototype = {
     colidiuCom: function(outro) {
         // Verifica se a colisao ocorreu com um ovini
         if (outro instanceof Nave) {
+            // Tocamos o som
+            SOM_VIDA.play();
+            
             // Excluimos a instancia da vida
             this.animacao.excluirSprite(this);
             this.colisor.excluirSprite(this);

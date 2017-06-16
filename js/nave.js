@@ -42,7 +42,7 @@ function Nave(context, teclado, imagem, imgExplosao, imgExplosaoAzul, imgTiro) {
     this.velocidade = 0;
     
     // Configuramos a spritesheet da nave
-    this.spritesheet = new Spritesheet(context, imagem, 3, 5);
+    this.spritesheet = new Spritesheet(context, imagem, 4, 5);
     
     // Selecionamos a linha da spritesheet
     this.spritesheet.linha = 0;
@@ -100,18 +100,15 @@ Nave.prototype = {
     desenhar: function() {
         // Lemos qual tecla está pressionada
         if (this.teclado.pressionada(SETA_ESQUERDA)) this.spritesheet.linha = 1;
-        else if (this.teclado.pressionada(SETA_DIREITA)) this.spritesheet.linha = 2;    
+        else if (this.teclado.pressionada(SETA_DIREITA)) this.spritesheet.linha = 2; 
+        else if (this.teclado.pressionada(SETA_BAIXO)) this.spritesheet.linha = 3; 
         else this.spritesheet.linha = 0;
         
         // Desenhamos a nave no canvas
         this.spritesheet.desenhar(this.x, this.y);
         
-        // Verifica se está indo para trás
-        if (this.teclado.pressionada(SETA_BAIXO)) {
-            this.spritesheet.coluna = 2;
-        } else {
-            this.spritesheet.proximoQuadro();
-        }
+        // Chamamos o próximo quadro
+        this.spritesheet.proximoQuadro();
     },
     
     atirar: function() {
